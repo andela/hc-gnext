@@ -8,3 +8,5 @@ static-collected
 .DS_Store
 static/.DS_Store
 local_settings.py
+hc-venv
+.vscode/

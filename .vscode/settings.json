@@ -1,4 +1,0 @@
-{
-    "python.pythonPath": "${workspaceRoot}/hc-venv/bin/python",
-    "git.ignoreLimitWarning": true
-}
