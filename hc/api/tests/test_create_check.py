@@ -80,4 +80,4 @@ class CreateCheckTestCase(BaseTestCase):
                   expected_error="name is not a string")
     
     ### Test for the assignment of channels
-    ### Test for the 'timeout is too small' and 'timeout is too large' errors
+    ### Test for the 'timeout is too small' and 'timeout is too large' errors.
