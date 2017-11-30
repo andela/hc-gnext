@@ -16,6 +16,8 @@ class CreateCheckTestCase(BaseTestCase):
 
         if expected_error:
             self.assertEqual(r.status_code, 400)
+            ##stil working on it
+            self.assertIn(str(expected_error), str(r._container))
             ### Assert that the expected error is the response error
 
         return r
@@ -68,7 +70,7 @@ class CreateCheckTestCase(BaseTestCase):
     def test_it_rejects_wrong_api_key(self):
         self.post({"api_key": "wrong"},
                   expected_error="wrong api_key")
-
+    
     def test_it_rejects_non_number_timeout(self):
         self.post({"api_key": "abc", "timeout": "oops"},
                   expected_error="timeout is not a number")
@@ -76,6 +78,6 @@ class CreateCheckTestCase(BaseTestCase):
     def test_it_rejects_non_string_name(self):
         self.post({"api_key": "abc", "name": False},
                   expected_error="name is not a string")
-
+    
     ### Test for the assignment of channels
     ### Test for the 'timeout is too small' and 'timeout is too large' errors
