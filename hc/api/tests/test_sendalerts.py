@@ -45,3 +45,4 @@ class SendAlertsTestCase(BaseTestCase):
 
     # Assert when Command's handle many that when handle_many should return
     # True
+    
