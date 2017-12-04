@@ -31,3 +31,4 @@ class EnsureTriggersTestCase(TestCase):
         check.refresh_from_db()
         self.assertGreater(check.alert_after, alert_after)
         # Assert that alert_after is lesser than the check's alert_after
+        
