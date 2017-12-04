@@ -8,6 +8,10 @@ from mock import patch
 
 
 class SendAlertsTestCase(BaseTestCase):
+    '''
+    This basically handles alerts to be send to users, checked if it's possible
+    to send to single user, or many user's at the same time.
+    '''
 
     @patch("hc.api.management.commands.sendalerts.Command.handle_one")
     def test_it_handles_few(self, mock):

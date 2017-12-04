@@ -3,6 +3,9 @@ from hc.test import BaseTestCase
 
 
 class PauseTestCase(BaseTestCase):
+    '''
+    Checks for the condition that the status is up
+    '''
 
     def test_it_works(self):
         check = Check(user=self.alice, status="up")

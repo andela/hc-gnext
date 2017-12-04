@@ -4,7 +4,10 @@ from hc.api.models import Check, Ping
 
 
 class PingTestCase(TestCase):
-
+    '''
+    This pings a request and returns up when the server is running or paused when down.
+    Also checks that post methods work.
+    '''
     def setUp(self):
         super(PingTestCase, self).setUp()
         self.check = Check.objects.create()
