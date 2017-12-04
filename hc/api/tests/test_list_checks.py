@@ -84,3 +84,4 @@ class ListChecksTestCase(BaseTestCase):
             "/api/v1/checks/",
             HTTP_X_API_KEY="abghdsghhdshdsc")
         self.assertEqual(response.json()['error'], 'wrong api_key')
+        
