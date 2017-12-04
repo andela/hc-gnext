@@ -234,3 +234,4 @@ class NotifyTestCase(BaseTestCase):
 
         self.channel.notify(self.check)
         self.assertTrue(n, "Internal Server Error")
+        
