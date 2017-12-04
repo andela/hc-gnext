@@ -18,5 +18,5 @@ class ApiAdminTestCase(BaseTestCase):
         ch = Channel(user=self.alice, kind="pushbullet", value="test-token")
         ch.save()
         rsp = ch.notify(self.check)
-        self.assertIn('40uy', rsp)
+        self.assertIn('401', rsp)
         # Assert for the push bullet
