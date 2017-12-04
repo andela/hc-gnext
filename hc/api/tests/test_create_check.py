@@ -16,7 +16,6 @@ class CreateCheckTestCase(BaseTestCase):
 
         if expected_error:
             self.assertEqual(r.status_code, 400)
-            ##stil working on it
             self.assertIn(str(expected_error), str(r._container))
             ### Assert that the expected error is the response error
 
@@ -49,6 +48,7 @@ class CreateCheckTestCase(BaseTestCase):
 
     def test_it_accepts_api_key_in_header(self):
         payload = json.dumps({"name": "Foo"})
+        
 
         ### Make the post request and get the response
         r = {'status_code': 201} ### This is just a placeholder variable
