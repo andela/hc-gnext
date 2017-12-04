@@ -22,6 +22,9 @@ class CreateCheckTestCase(BaseTestCase):
         return r
 
     def test_it_works(self):
+        '''
+        checks that it's working
+        '''
         r = self.post({
             "api_key": "abc",
             "name": "Foo",
@@ -47,6 +50,9 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertEqual(check.grace.total_seconds(), 60)
 
     def test_it_accepts_api_key_in_header(self):
+        '''
+        Accepts api into the header
+        '''
         payload = json.dumps({"name": "Foo"})
 
         # Make the post request and get the response
@@ -55,6 +61,9 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertEqual(r['status_code'], 201)
 
     def test_it_handles_missing_request_body(self):
+        '''
+        Checks for missing body data in the requests
+        '''
         # Make the post request with a missing body and get the response
         # This is just a placeholder variable
         r = {'status_code': 400, 'error': "wrong api_key"}
@@ -73,10 +82,16 @@ class CreateCheckTestCase(BaseTestCase):
                   expected_error="wrong api_key")
 
     def test_it_rejects_non_number_timeout(self):
+        '''
+        checks that non numbers timeout
+        '''
         self.post({"api_key": "abc", "timeout": "oops"},
                   expected_error="timeout is not a number")
 
     def test_it_rejects_non_string_name(self):
+        '''
+        checks that only strings are accepted
+        '''
         self.post({"api_key": "abc", "name": False},
                   expected_error="name is not a string")
 
