@@ -25,4 +25,3 @@ class ApiAdminTestCase(BaseTestCase):
         ch.save()
         rsp = ch.notify(self.check)
         self.assertIn('401', rsp)
-        # Assert for the push bullet
