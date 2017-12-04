@@ -10,6 +10,9 @@ from hc.api.models import Check
 class EnsureTriggersTestCase(TestCase):
 
     def test_ensure_triggers(self):
+        '''
+        checks that trigger for cron jobs are working.
+        '''
         Command().handle()
 
         check = Check.objects.create()
