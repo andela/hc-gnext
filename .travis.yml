@@ -5,6 +5,9 @@ python:
 install:
     - pip install -r requirements.txt
     - pip install braintree coveralls mock mysqlclient
+    - pip install django-nose==1.4.5
+    - pip install coverage==4.4.2
+    - pip install pylint==1.7.4
 env:
   - DB=sqlite
   - DB=mysql
@@ -12,6 +15,8 @@ env:
 addons:
   postgresql: "9.4"
 script:
+  - pylint hc/api/tests
   - coverage run --omit=*/tests/* --source=hc manage.py test
+  - python ./manage.py test hc.api --with-coverage
 after_success: coveralls
 cache: pip
