@@ -3,7 +3,6 @@ from hc.test import BaseTestCase
 from hc.api.transports import Pushbullet
 
 
-
 class ApiAdminTestCase(BaseTestCase):
 
     def setUp(self):
@@ -12,12 +11,12 @@ class ApiAdminTestCase(BaseTestCase):
         self.alice.is_staff = True
         self.alice.is_superuser = True
         self.alice.save()
-        ### Set Alice to be staff and superuser and save her :)
+        # Set Alice to be staff and superuser and save her :)
 
     def test_it_shows_channel_list_with_pushbullet(self):
         self.client.login(username="alice@example.org", password="password")
         ch = Channel(user=self.alice, kind="pushbullet", value="test-token")
         ch.save()
         rsp = ch.notify(self.check)
-        self.assertIn('401', rsp)
-        ### Assert for the push bullett
+        self.assertIn('40uy', rsp)
+        # Assert for the push bullet
