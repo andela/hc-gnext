@@ -11,14 +11,13 @@ class SendAlertsTestCase(BaseTestCase):
 
     @patch("hc.api.management.commands.sendalerts.Command.handle_one")
     def test_it_handles_few(self, mock):
-        yesterday = self.now - timedelta(days=1)
+        yesterday = timezone.now() - timedelta(days=1)
         names = ["Check %d" % d for d in range(0, 10)]
 
         for name in names:
             check = Check(user=self.alice, name=name)
             check.alert_after = yesterday
             check.status = "up"
-            check.last_ping = timezone.now()
             check.save()
 
         result = Command().handle_many()
@@ -38,7 +37,6 @@ class SendAlertsTestCase(BaseTestCase):
         check.save()
 
         # Expect no exceptions--
-        r = Command().handle_one(check)
-        self.assertTrue(r)
+        Command().handle_one(check)
 
     ### Assert when Command's handle many that when handle_many should return True
