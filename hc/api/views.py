@@ -62,7 +62,6 @@ def checks(request):
             check.timeout = td(seconds=request.json["timeout"])
         if "grace" in request.json:
             check.grace = td(seconds=request.json["grace"])
-
         check.save()
 
         # This needs to be done after saving the check, because of

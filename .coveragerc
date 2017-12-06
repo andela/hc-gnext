@@ -1,0 +1,9 @@
+[run]
+
+omit = 
+    *__init__.py*
+    */management*
+    */migrations*
+    *__pycache__*
+    *admin.py*
+    *transports.py*
