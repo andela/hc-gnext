@@ -11,7 +11,7 @@ class BadgeTestCase(BaseTestCase):
         super(BadgeTestCase, self).setUp()
         self.check = Check.objects.create(user=self.alice, tags="foo bar")
 
-    def test_it_rejects_bad_signature(self):
+    def test_bad_signature_is_rejected(self):
         r = self.client.get("/badge/%s/12345678/foo.svg" % self.alice.username)
         self.assertEqual(400, r.status_code)
         # Assert the expected response status code
