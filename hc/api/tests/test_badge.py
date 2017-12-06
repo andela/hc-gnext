@@ -12,11 +12,17 @@ class BadgeTestCase(BaseTestCase):
         self.check = Check.objects.create(user=self.alice, tags="foo bar")
 
     def test_bad_signature_is_rejected(self):
+        '''
+        Rejects bad signature.
+        '''
         r = self.client.get("/badge/%s/12345678/foo.svg" % self.alice.username)
         self.assertEqual(400, r.status_code)
         # Assert the expected response status code
 
     def test_it_returns_svg(self):
+        '''
+        Returns the svg badge for user.
+        '''
         sig = base64_hmac(str(self.alice.username), "foo", settings.SECRET_KEY)
         sig = sig[:8].decode("utf-8")
         url = "/badge/%s/%s/foo.svg" % (self.alice.username, sig)
