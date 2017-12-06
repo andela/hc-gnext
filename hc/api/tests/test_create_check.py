@@ -43,10 +43,9 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertEqual(doc["name"], "Foo")
         self.assertEqual(doc["tags"], "bar,baz")
 
+        # Assert the expected last_ping and n_pings value
         self.assertEqual(check.last_ping,None)
         self.assertEqual(check.n_pings,10)
-
-        # Assert the expected last_ping and n_pings values
 
         self.assertEqual(Check.objects.count(), 1)
         check = Check.objects.get()
@@ -59,23 +58,22 @@ class CreateCheckTestCase(BaseTestCase):
         '''
         Accepts api into the header
         '''
+        # Make the post request and get the response
         payload = json.dumps({"name": "Foo"})
         response = self.client.post(self.URL, payload,content_type="application/json", HTTP_X_API_KEY="abc")
         self.assertEqual(response.status_code, 201)
-        # Make the post request and get the response
+        
 
     def test_it_handles_missing_request_body(self):
         '''
         Checks for missing body data in the requests
         '''
         # Make the post request with a missing body and get the response
-        # This is just a placeholder variable
         response = self.client.post(self.URL, content_type="application/json", HTTP_X_API_KEY="ujyhi")
         self.assertEqual(response.status_code, 400)
 
     def test_it_handles_invalid_json(self):
         # Make the post request with invalid json data type
-        # This is just a placeholder variable
         response = self.client.post(self.URL,{'name'},content_type="application/json", HTTP_X_API_KEY="abc")
         self.assertEqual(response.json()["error"], "could not parse request body")
 
