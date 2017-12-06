@@ -10,6 +10,9 @@ from hc.api.models import Check
 class EnsureTriggersTestCase(TestCase):
 
     def test_ensure_triggers(self):
+        '''
+        checks that trigger for cron jobs are working.
+        '''
         Command().handle()
 
         check = Check.objects.create()
@@ -28,3 +31,4 @@ class EnsureTriggersTestCase(TestCase):
         check.refresh_from_db()
         self.assertGreater(check.alert_after, alert_after)
         # Assert that alert_after is lesser than the check's alert_after
+        

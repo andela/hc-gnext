@@ -8,6 +8,9 @@ from hc.api.models import Check
 class CheckModelTestCase(TestCase):
 
     def test_it_strips_tags(self):
+        '''
+        tests for tags
+        '''
         check = Check()
 
         check.tags = " foo  bar "
@@ -19,6 +22,9 @@ class CheckModelTestCase(TestCase):
        
 
     def test_status_works_with_grace_period(self):
+        '''
+        Checks if the status works within the grace period.
+        '''
         check = Check()
 
         check.status = "up"
@@ -30,6 +36,9 @@ class CheckModelTestCase(TestCase):
         # The above 2 asserts fail. Make them pass
 
     def test_paused_check_is_not_in_grace_period(self):
+        '''
+        Checks if status paused its not in grace period.
+        '''
         check = Check()
 
         check.status = "up"

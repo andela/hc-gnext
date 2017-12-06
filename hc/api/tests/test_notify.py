@@ -9,6 +9,9 @@ from requests.exceptions import ConnectionError, Timeout
 
 
 class NotifyTestCase(BaseTestCase):
+    '''
+    Test handle notification 
+    '''
 
     def _setup_data(self, kind, value, status="down", email_verified=True):
         self.check = Check()
@@ -231,3 +234,4 @@ class NotifyTestCase(BaseTestCase):
 
         self.channel.notify(self.check)
         self.assertTrue(n, "Internal Server Error")
+        

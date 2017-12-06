@@ -70,11 +70,18 @@ class ListChecksTestCase(BaseTestCase):
 
     # Test that it accepts an api_key in the request
     def test_that_it_accepts_an_api_key(self):
+        '''
+        checks if system accepts wrong api key and then return reponse.
+        '''
         response = self.client.get("/api/v1/checks/", HTTP_X_API_KEY="abc")
         self.assertEqual(response.status_code, 200)
 
     def test_that_it_accepts_a_wrong_api_key(self):
+        '''
+        checks if system accepts wrong api key and then return reponse.
+        '''
         response = self.client.get(
             "/api/v1/checks/",
             HTTP_X_API_KEY="abghdsghhdshdsc")
         self.assertEqual(response.json()['error'], 'wrong api_key')
+        
