@@ -114,7 +114,7 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertNotEqual(channel.checks, None)
         self.assertEqual(channel.user, self.alice)
 
-    # Test for the 'timeout is too small' and 'timeout is too large' errors.
+    # Test for the 'timeout is too small' and 'timeout is too large' errors
     def test_timeout_too_small(self):
         self.post({"api_key": "abc", "timeout": 0},
                   expected_error="timeout is too small")
