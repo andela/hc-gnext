@@ -2,23 +2,16 @@ language: python
 python:
   - "2.7"
   - "3.4"
-  - "3.6"
-branches:
-    only:
-        - ch-api-tests-153114590
 install:
     - pip install -r requirements.txt
-    - pip install pep8
     - pip install braintree coveralls mock mysqlclient
 env:
+  - DB=sqlite
+  - DB=mysql
   - DB=postgres
 addons:
-  postgresql: "10.1"
-
-before_script:
-  - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'create database hc;' -U postgres fi"
+  postgresql: "9.4"
 script:
   - coverage run --omit=*/tests/* --source=hc manage.py test
-  - pep8 --show-source --show-pep8 . || exit 0
 after_success: coveralls
 cache: pip
