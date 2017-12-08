@@ -9,7 +9,7 @@ env:
 addons:
   postgresql: "9.4"
 script:
-  - pep8 --show-source --show-pep8 hc/ || exit 0
+  - pep8 --show-source --show-pep8 hc/
   - coverage run --omit=*/tests/* --source=hc manage.py test
 after_success: coveralls
 cache: pip
