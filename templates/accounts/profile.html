@@ -25,18 +25,21 @@
                 <form method="post">
                     {% csrf_token %}
                     <h2>Periodic Reports</h2>
-                    <label>
+                    <label data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                         <input
+                            id="reports"
                             name="reports_allowed"
                             type="checkbox"
                             {% if profile.reports_allowed %} checked {% endif %}>
                         Send me a summary of my checks
                     </label></br>
+                    <div id="collapseOne" aria-expanded="false" class="collapse">
                     <label>
                         <input
                             name="reports_schedule"
                             type="radio"
                             value="1"
+                            class="reportshow"
                         >
                         Daily
                     </label></br>
@@ -45,6 +48,7 @@
                             name="reports_schedule"
                             type="radio"
                             value="7"
+                            class="reportshow"
                         >
                         Weekly
                     </label></br>
@@ -53,9 +57,11 @@
                             name="reports_schedule"
                             type="radio"
                             value="30"
+                            class="reportshow"
                             >
                         Monthly
                     </label></br>
+                    </div>
                     <button
                         name="update_reports_allowed"
                         type="submit"
@@ -340,6 +346,7 @@
         </form>
     </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}
