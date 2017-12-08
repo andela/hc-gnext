@@ -2,9 +2,6 @@
 language: python
 python:
   - "3.6"
-branches:
-    only:
-        - ch-api-tests-153114590
 install:
     - pip install -r requirements.txt
     - pip install braintree coveralls mock
