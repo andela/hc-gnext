@@ -7,3 +7,11 @@ static-collected
 
 .DS_Store
 static/.DS_Store
+.vscode
+virtualenv
+.idea
+venv
+.noseids
+.coverage
+hc_-venv/
+htmlcov/
