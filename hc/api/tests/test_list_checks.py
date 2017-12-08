@@ -33,14 +33,18 @@ class ListChecksTestCase(BaseTestCase):
 
     def test_it_works(self):
         r = self.get()
-        self.assertEqual(r.status_code, 200)
-        # Assert the response status code
 
+        # Assert the response status code
+        self.assertEqual(r.status_code, 200)
         doc = r.json()
         self.assertTrue("checks" in doc)
 
         checks = {check["name"]: check for check in doc["checks"]}
+
+        # Assert the expected length of checks
         self.assertTrue(len(checks) == 2)
+
+        # Assert the checks Alice 1 and Alice 2's timeout, grace, ping_url, status,
         self.assertIn('timeout', checks['Alice 2'])
         self.assertIn('grace', checks['Alice 2'])
         self.assertIn('ping_url', checks['Alice 2'])
@@ -51,13 +55,11 @@ class ListChecksTestCase(BaseTestCase):
         self.assertIn('ping_url', checks['Alice 1'])
         self.assertIn('status', checks['Alice 1'])
 
+        # last_ping, n_pings and pause_url
         self.assertIn('last_ping', checks['Alice 2'])
         self.assertIn('n_pings', checks['Alice 2'])
         self.assertIn('pause_url', checks['Alice 2'])
-        # Assert the expected length of checks
-        # Assert the checks Alice 1 and Alice 2's timeout, grace, ping_url, status,
-        ### last_ping, n_pings and pause_url
-
+        
     def test_it_shows_only_users_checks(self):
         bobs_check = Check(user=self.bob, name="Bob 1")
         bobs_check.save()
