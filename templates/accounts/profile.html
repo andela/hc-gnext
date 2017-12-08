@@ -27,6 +27,7 @@
                     <h2>Periodic Reports</h2>
                     <label>
                         <input
+                            id="reports"
                             name="reports_allowed"
                             type="checkbox"
                             {% if profile.reports_allowed %} checked {% endif %}>
@@ -60,6 +61,7 @@
                             >
                         Monthly
                     </label></br>
+                    </div>
                     <button
                         name="update_reports_allowed"
                         type="submit"
@@ -344,6 +346,7 @@
         </form>
     </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}

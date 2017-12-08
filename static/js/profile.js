@@ -9,5 +9,13 @@ $(function() {
 
         return false;
     });
+    $("#report").click(function () {
+        if ($(this).is(":checked")) {
+            $("#div1").show();
+        } else {
+            $("#div1").hide();
+        }
+    });
 
 });
+
