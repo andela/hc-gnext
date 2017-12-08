@@ -16,7 +16,7 @@ def num_pinged_checks(profile):
 
 class Command(BaseCommand):
     help = 'Send due monthly reports'
-    tmpl = "Sending monthly report to %s"
+    tmpl = "Sending due report to %s"
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -27,7 +27,7 @@ class Command(BaseCommand):
             help='Keep running indefinitely in a 300 second wait loop',
         )
 
-    def handle_one_run(self):
+    def handle_month_run(self):
         now = timezone.now()
         month_before = now - timedelta(days=30)
 
@@ -36,7 +36,48 @@ class Command(BaseCommand):
 
         q = Profile.objects.filter(report_due | report_not_scheduled)
         q = q.filter(reports_allowed=True)
+        q = q.filter(reports_duration=30)
         q = q.filter(user__date_joined__lt=month_before)
+        sent = 0
+        for profile in q:
+            if num_pinged_checks(profile) > 0:
+                self.stdout.write(self.tmpl % profile.user.email)
+                profile.send_report()
+                sent += 1
+
+        return sent
+
+    def handle_week_run(self):
+        now = timezone.now()
+        week_before = now - timedelta(days=7)
+
+        report_due = Q(next_report_date__lt=now)
+        report_not_scheduled = Q(next_report_date__isnull=True)
+
+        q = Profile.objects.filter(report_due | report_not_scheduled)
+        q = q.filter(reports_allowed=True)
+        q = q.filter(reports_duration=7)
+        q = q.filter(user__date_joined__lt=week_before)
+        sent = 0
+        for profile in q:
+            if num_pinged_checks(profile) > 0:
+                self.stdout.write(self.tmpl % profile.user.email)
+                profile.send_report()
+                sent += 1
+
+        return sent
+
+    def handle_daily_run(self):
+        now = timezone.now()
+        day_before = now - timedelta(days=1)
+
+        report_due = Q(next_report_date__lt=now)
+        report_not_scheduled = Q(next_report_date__isnull=True)
+
+        q = Profile.objects.filter(report_due | report_not_scheduled)
+        q = q.filter(reports_allowed=True)
+        q = q.filter(reports_duration=1)
+        q = q.filter(user__date_joined__lt=day_before)
         sent = 0
         for profile in q:
             if num_pinged_checks(profile) > 0:
@@ -48,11 +89,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if not options["loop"]:
-            return "Sent %d reports" % self.handle_one_run()
+            return "Sent %d monthly reports %d weekly reports %d daily reports" % (self.handle_month_run(), self.handle_week_run(), self.handle_daily_run())
 
         self.stdout.write("sendreports is now running")
         while True:
-            self.handle_one_run()
+            self.handle_month_run()
+            self.handle_week_run()
+            self.handle_daily_run()
 
             formatted = timezone.now().isoformat()
             self.stdout.write("-- MARK %s --" % formatted)
