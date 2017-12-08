@@ -90,7 +90,7 @@ class CreateCheckTestCase(BaseTestCase):
 
     def test_it_rejects_non_string_name(self):
         '''
-        checks that only strings are accepted
+        This checks that only strings only are taken in else an error is returned
         '''
         self.post({"api_key": "abc", "name": False},
                   expected_error="name is not a string")
