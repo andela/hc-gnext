@@ -25,7 +25,7 @@
                 <form method="post">
                     {% csrf_token %}
                     <h2>Periodic Reports</h2>
-                    <label data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    <label>
                         <input
                             id="reports"
                             name="reports_allowed"
@@ -33,7 +33,7 @@
                             {% if profile.reports_allowed %} checked {% endif %}>
                         Send me a summary of my checks
                     </label></br>
-                    <div id="collapseOne" aria-expanded="false" class="collapse">
+                    <div>
                     <label>
                         <input
                             name="reports_schedule"
