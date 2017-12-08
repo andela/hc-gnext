@@ -1,5 +1,6 @@
 import uuid
 import re
+from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth import login as auth_login
@@ -11,6 +12,7 @@ from django.contrib.auth.models import User
 from django.core import signing
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from hc.accounts.forms import (EmailPasswordForm, InviteTeamMemberForm,
                                RemoveTeamMemberForm, ReportSettingsForm,
                                SetPasswordForm, TeamNameForm)
@@ -157,12 +159,16 @@ def profile(request):
             form = ReportSettingsForm(request.POST)
             if form.is_valid():
                 profile.reports_allowed = form.cleaned_data["reports_allowed"]
+                #if form.cleaned_data["reports_allowed"]:
+                now = timezone.now()
+                days = form.cleaned_data["reports_duration"]
+                profile.next_report_date = now + timedelta(days=int(days))
+                profile.reports_duration = days
                 profile.save()
                 messages.success(request, "Your settings have been updated!")
         elif "invite_team_member" in request.POST:
             if not profile.team_access_allowed:
                 return HttpResponseForbidden()
-
             form = InviteTeamMemberForm(request.POST)
             if form.is_valid():
 
