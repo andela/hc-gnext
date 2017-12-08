@@ -33,31 +33,31 @@
                             {% if profile.reports_allowed %} checked {% endif %}>
                         Send me a summary of my checks
                     </label></br>
-                    <div>
+                    Select report duration:&nbsp; 
                     <label>
                         <input
-                            name="reports_schedule"
+                            name="reports_duration"
                             type="radio"
                             value="1"
-                            class="reportshow"
+                            {% if profile.reports_duration == 1 %} checked {% endif %}
                         >
                         Daily
-                    </label></br>
+                    </label>&nbsp;
                     <label>
                         <input
-                            name="reports_schedule"
+                            name="reports_duration"
                             type="radio"
                             value="7"
-                            class="reportshow"
+                            {% if profile.reports_duration == 7 %} checked {% endif %}
                         >
                         Weekly
-                    </label></br>
+                    </label>&nbsp;
                     <label>
                         <input
-                            name="reports_schedule"
+                            name="reports_duration"
                             type="radio"
                             value="30"
-                            class="reportshow"
+                            {% if profile.reports_duration == 30 %} checked {% endif %}
                             >
                         Monthly
                     </label></br>

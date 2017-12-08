@@ -1,6 +1,11 @@
 Hello,
 
-This is a monthly report sent by healthchecks.io.
+
+This is a
+{% if report_duration == 1 %} daily
+{% elif report_duration == 7%} weekly
+{% elif report_duration == 30 %} monthly
+{% endif %} report sent by healthchecks.io.
 
 {% include 'emails/summary-text.html' %}
 

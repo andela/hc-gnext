@@ -1,2 +1,4 @@
-Monthly Report
-
+{% if report_duration == 1 %} Daily
+{% elif report_duration == 7%} Weekly
+{% elif report_duration == 30 %} Monthly
+{% endif %} Report
