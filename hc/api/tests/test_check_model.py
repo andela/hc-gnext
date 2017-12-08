@@ -15,6 +15,7 @@ class CheckModelTestCase(TestCase):
         check.tags = " foo  bar "
         self.assertEquals(check.tags_list(), ["foo", "bar"])
         
+    # Test for empty string
     def test_it_returns_an_empty_list(self):
         '''
         tests for empty string

@@ -78,7 +78,7 @@ class ListChecksTestCase(BaseTestCase):
         response = self.client.get("/api/v1/checks/", HTTP_X_API_KEY="abc")
         self.assertEqual(response.status_code, 200)
 
-    def test_that_it_accepts_a_wrong_api_key(self):
+    def test_that_it_rejects_a_wrong_api_key(self):
         '''
         This does a check for the api coming in is wrong then returns a response.
         '''

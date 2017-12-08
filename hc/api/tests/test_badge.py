@@ -15,9 +15,9 @@ class BadgeTestCase(BaseTestCase):
         '''
         Rejects bad signature.
         '''
-        r = self.client.get("/badge/%s/12345678/foo.svg" % self.alice.username)
-        self.assertEqual(400, r.status_code)
+        response = self.client.get("/badge/%s/12345678/foo.svg" % self.alice.username)
         # Assert the expected response status code
+        self.assertEqual(400, response.status_code)
 
     def test_it_returns_svg(self):
         '''
@@ -27,6 +27,7 @@ class BadgeTestCase(BaseTestCase):
         sig = sig[:8].decode("utf-8")
         url = "/badge/%s/%s/foo.svg" % (self.alice.username, sig)
 
-        r = self.client.get(url)
-        self.assertEqual(200, r.status_code)
-        # Assert that the svg is returned
+        response = self.client.get(url)
+         # Assert that the svg is returned
+        self.assertEqual(200, response.status_code)
+       

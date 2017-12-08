@@ -78,6 +78,9 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertEqual(response.json()["error"], "could not parse request body")
 
     def test_it_rejects_wrong_api_key(self):
+        '''
+        This checks the api_key is right
+        '''
         self.post({"api_key": "wrong"},
                   expected_error="wrong api_key")
 
