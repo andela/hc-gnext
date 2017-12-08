@@ -14,8 +14,7 @@ class CheckModelTestCase(TestCase):
         check = Check()
         check.tags = " foo  bar "
         self.assertEquals(check.tags_list(), ["foo", "bar"])
-
-    # Repeat above test for when check is an empty string
+        
     def test_it_returns_an_empty_list(self):
         '''
         tests for empty string
@@ -37,7 +36,6 @@ class CheckModelTestCase(TestCase):
         self.assertTrue(check.in_grace_period())
         self.assertEqual(check.get_status(), "up")
 
-        # The above 2 asserts fail. Make them pass
 
     def test_paused_check_is_not_in_grace_period(self):
         '''

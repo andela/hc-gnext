@@ -23,7 +23,7 @@ class CreateCheckTestCase(BaseTestCase):
 
     def test_it_works(self):
         '''
-        checks that it's working
+        checks that pings are working
         '''
         check = Check()
         check.n_pings = 10
@@ -83,14 +83,14 @@ class CreateCheckTestCase(BaseTestCase):
 
     def test_it_rejects_non_number_timeout(self):
         '''
-        checks that non numbers timeout
+        This checks the timeout section if the values are non numeric then returns an error if the values are not intergers(numbers)
         '''
         self.post({"api_key": "abc", "timeout": "oops"},
                   expected_error="timeout is not a number")
 
     def test_it_rejects_non_string_name(self):
         '''
-        checks that only strings are accepted
+        This checks that only strings only are taken in else an error is returned
         '''
         self.post({"api_key": "abc", "name": False},
                   expected_error="name is not a string")
