@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.core import signing
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import redirect, render
@@ -97,7 +98,14 @@ def logout(request):
 def login_link_sent(request):
     return render(request, "accounts/login_link_sent.html")
 
+@login_required
+def reports(request):
+    if request.method == "GET":
+        result = Profile.objects.filter(user=request.user)
+        return render(request, "accounts/reports.html", {"checks": request.user.check_set.order_by("created")})
 
+
+  
 def set_password_link_sent(request):
     return render(request, "accounts/set_password_link_sent.html")
 
@@ -169,10 +177,11 @@ def profile(request):
             form = ReportSettingsForm(request.POST)
             if form.is_valid():
                 profile.reports_allowed = form.cleaned_data["reports_allowed"]
+                # if form.cleaned_data["reports_allowed"]:
                 now = timezone.now()
-                days = form.cleaned_data["reports_duration"]
-                profile.next_report_date = now + timedelta(days=int(days))
-                profile.reports_duration = days
+                seconds = form.cleaned_data["reports_duration"]
+                profile.next_report_date = now + timedelta(seconds=int(seconds))
+                profile.reports_duration = seconds
                 profile.save()
                 messages.success(request, "Your settings have been updated!")
                 show_report_form = False
