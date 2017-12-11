@@ -1,14 +1,15 @@
 from datetime import timedelta
-
 from django.utils import timezone
 from hc.api.management.commands.sendalerts import Command
 from hc.api.models import Check
 from hc.test import BaseTestCase
-from mock import patch
-
+from unittest.mock import patch
 
 class SendAlertsTestCase(BaseTestCase):
-
+    '''
+    This basically handles alerts to be send to users, checked if it's possible
+    to send to single user, or many user's at the same time.
+    '''
     @patch("hc.api.management.commands.sendalerts.Command.handle_one")
     def test_it_handles_few(self, mock):
         yesterday = timezone.now() - timedelta(days=1)
@@ -19,24 +20,20 @@ class SendAlertsTestCase(BaseTestCase):
             check.alert_after = yesterday
             check.status = "up"
             check.save()
-
+        # Assert when Command's handle many that when handle_many should return
+        # True
         result = Command().handle_many()
-        assert result, "handle_many should return True"
-
+        self.assertTrue(result)
         handled_names = []
         for args, kwargs in mock.call_args_list:
             handled_names.append(args[0].name)
+        self.assertSetEqual(set(names), set(handled_names))
 
-        assert set(names) == set(handled_names)
-        ### The above assert fails. Make it pass
-
+        # The above assert fails. Make it pass
     def test_it_handles_grace_period(self):
         check = Check(user=self.alice, status="up")
         # 1 day 30 minutes after ping the check is in grace period:
         check.last_ping = timezone.now() - timedelta(days=1, minutes=30)
         check.save()
-
         # Expect no exceptions--
         Command().handle_one(check)
-
-    ### Assert when Command's handle many that when handle_many should return True
