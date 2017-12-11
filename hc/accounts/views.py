@@ -132,7 +132,7 @@ def check_token(request, username, token):
 def dashboard(request):
     if request.method == "GET":
         checks = Check.objects.filter(user=request.user)
-        return render(request, "accounts/dashboard.html", {'checks': checks})
+        return render(request, "accounts/dashboard.html", {'checks': checks},{'report':reports})
 
 
 @login_required
