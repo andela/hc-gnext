@@ -5,8 +5,9 @@ Django==1.10
 django_compressor==2.1
 djmail==0.11.0
 futures==3.0.3
-gunicorn==19.7.1
 pep8==1.7.1
 premailer==2.9.6
 psycopg2==2.7.3.2
 requests==2.9.1
+waitress==1.1.0
+whitenoise
