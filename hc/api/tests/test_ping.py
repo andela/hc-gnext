@@ -8,6 +8,7 @@ class PingTestCase(TestCase):
     This pings a request and returns up when the server is running or paused when down.
     Also checks that post methods work.
     '''
+
     def setUp(self):
         super(PingTestCase, self).setUp()
         self.check = Check.objects.create()
@@ -103,4 +104,3 @@ class PingTestCase(TestCase):
     def test_csrf_client_head_works(self):
         r = self.csrf_client.get("/ping/%s/" % self.check.code)
         self.assertEqual(r.status_code, 200)
-        

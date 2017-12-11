@@ -44,7 +44,8 @@ class ListChecksTestCase(BaseTestCase):
         # Assert the expected length of checks
         self.assertTrue(len(checks) == 2)
 
-        # Assert the checks Alice 1 and Alice 2's timeout, grace, ping_url, status,
+        # Assert the checks Alice 1 and Alice 2's timeout, grace, ping_url,
+        # status,
         self.assertIn('timeout', checks['Alice 2'])
         self.assertIn('grace', checks['Alice 2'])
         self.assertIn('ping_url', checks['Alice 2'])
@@ -59,7 +60,7 @@ class ListChecksTestCase(BaseTestCase):
         self.assertIn('last_ping', checks['Alice 2'])
         self.assertIn('n_pings', checks['Alice 2'])
         self.assertIn('pause_url', checks['Alice 2'])
-        
+
     def test_it_shows_only_users_checks(self):
         bobs_check = Check(user=self.bob, name="Bob 1")
         bobs_check.save()
@@ -86,4 +87,3 @@ class ListChecksTestCase(BaseTestCase):
             "/api/v1/checks/",
             HTTP_X_API_KEY="abghdsghhdshdsc")
         self.assertEqual(response.json()['error'], 'wrong api_key')
-        
