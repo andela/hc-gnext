@@ -141,6 +141,7 @@ def profile(request):
         profile.save()
 
     show_api_key = False
+    show_report_form = False
     if request.method == "POST":
         if "set_password" in request.POST:
             profile.send_set_password_link()
@@ -155,17 +156,20 @@ def profile(request):
             messages.info(request, "The API key has been revoked!")
         elif "show_api_key" in request.POST:
             show_api_key = True
+        # toggle between show edit report form and saved report settings
+        elif  "edit_reports_settings" in request.POST:
+            show_report_form = True
         elif "update_reports_allowed" in request.POST:
             form = ReportSettingsForm(request.POST)
             if form.is_valid():
                 profile.reports_allowed = form.cleaned_data["reports_allowed"]
-                #if form.cleaned_data["reports_allowed"]:
                 now = timezone.now()
                 days = form.cleaned_data["reports_duration"]
                 profile.next_report_date = now + timedelta(days=int(days))
                 profile.reports_duration = days
                 profile.save()
                 messages.success(request, "Your settings have been updated!")
+                show_report_form = False
         elif "invite_team_member" in request.POST:
             if not profile.team_access_allowed:
                 return HttpResponseForbidden()
@@ -218,8 +222,9 @@ def profile(request):
     ctx = {
         "page": "profile",
         "badge_urls": badge_urls,
-        "profile": profile,
-        "show_api_key": show_api_key
+        "profile": request.user.profile,
+        "show_api_key": show_api_key,
+        "show_report_form": show_report_form
     }
 
     return render(request, "accounts/profile.html", ctx)
