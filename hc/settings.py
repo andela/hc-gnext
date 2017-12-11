@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import warnings
 
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 HOST = "localhost"
@@ -95,7 +97,7 @@ if os.environ.get("DB") == "postgres":
         'default': {
             'ENGINE':   'django.db.backends.postgresql',
             'NAME':     'hc',
-            'USER':     os.environ.get('DATABASE_URL', 'postgres'),
+            'USER':     'postgres',
             'TEST': {'CHARSET': 'UTF8'}
         }
     }
@@ -110,9 +112,13 @@ if os.environ.get("DB") == "mysql":
         }
     }
 
+DATABASES = {
+    'default': dj_database_url.config(conn_max_age=500)
+}
+
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Africa/Nairobi'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
