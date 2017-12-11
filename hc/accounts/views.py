@@ -149,6 +149,7 @@ def profile(request):
         profile.save()
 
     show_api_key = False
+    show_report_form = False
     if request.method == "POST":
         if "set_password" in request.POST:
             profile.send_set_password_link()
@@ -163,17 +164,24 @@ def profile(request):
             messages.info(request, "The API key has been revoked!")
         elif "show_api_key" in request.POST:
             show_api_key = True
+        # toggle between show edit report form and saved report settings
+        elif  "edit_reports_settings" in request.POST:
+            show_report_form = True
         elif "update_reports_allowed" in request.POST:
             form = ReportSettingsForm(request.POST)
             if form.is_valid():
                 profile.reports_allowed = form.cleaned_data["reports_allowed"]
+<<<<<<< HEAD
                 # if form.cleaned_data["reports_allowed"]:
+=======
+>>>>>>> bd14d1d407d8154e37aff0d4309f26b1f90941a2
                 now = timezone.now()
                 seconds = form.cleaned_data["reports_duration"]
                 profile.next_report_date = now + timedelta(seconds=int(seconds))
                 profile.reports_duration = seconds
                 profile.save()
                 messages.success(request, "Your settings have been updated!")
+                show_report_form = False
         elif "invite_team_member" in request.POST:
             if not profile.team_access_allowed:
                 return HttpResponseForbidden()
@@ -226,8 +234,9 @@ def profile(request):
     ctx = {
         "page": "profile",
         "badge_urls": badge_urls,
-        "profile": profile,
-        "show_api_key": show_api_key
+        "profile": request.user.profile,
+        "show_api_key": show_api_key,
+        "show_report_form": show_report_form
     }
 
     return render(request, "accounts/profile.html", ctx)
@@ -280,11 +289,11 @@ def switch_team(request, target_username):
     # Superuser can switch to any team.
     access_ok = request.user.is_superuser
 
-    # Users can switch to teams they are members of.
+    # Users can switch to their own teams.
     if not access_ok and other_user.id == request.user.id:
         access_ok = True
 
-    # Users can switch to their own teams.
+    # Users can switch to teams they are members of.
     if not access_ok:
         for membership in request.user.member_set.all():
             if membership.team.user.id == other_user.id:
