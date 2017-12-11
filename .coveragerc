@@ -1,12 +1,12 @@
 [run]
- omit =
+omit =
     */python?.?/*
     */site-packages/nose/*
     *__init__*
     *migrations*
+    *management*
     */manage.py
     */test*.py
     */urls.py
     */admin.py
     */local_settings.py
-    */settings.py
