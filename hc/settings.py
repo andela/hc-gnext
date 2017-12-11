@@ -95,7 +95,7 @@ if os.environ.get("DB") == "postgres":
         'default': {
             'ENGINE':   'django.db.backends.postgresql',
             'NAME':     'hc',
-            'USER':     'DATABASE_URL',
+            'USER':     os.environ.get('DATABASE_URL', 'postgres'),
             'TEST': {'CHARSET': 'UTF8'}
         }
     }
@@ -132,7 +132,6 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 COMPRESS_OFFLINE = True
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 EMAIL_BACKEND = "djmail.backends.default.EmailBackend"
 
