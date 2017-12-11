@@ -1,7 +1,5 @@
 from django.test import Client, TestCase
-
 from hc.api.models import Check, Ping
-
 
 class PingTestCase(TestCase):
     '''
