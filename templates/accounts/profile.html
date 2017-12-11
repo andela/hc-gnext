@@ -22,51 +22,88 @@
     <div class="col-sm-6">
         <div class="panel panel-default">
             <div class="panel-body settings-block">
-                <form method="post">
-                    {% csrf_token %}
-                    <h2>Periodic Reports</h2>
-                    <label>
-                        <input
-                            id="reports"
-                            name="reports_allowed"
-                            type="checkbox"
-                            {% if profile.reports_allowed %} checked {% endif %}>
-                        Send me a summary of my checks
-                    </label></br>
-                    Select report duration:&nbsp; 
-                    <label>
-                        <input
-                            name="reports_duration"
-                            type="radio"
-                            value="1"
-                            {% if profile.reports_duration == 1 %} checked {% endif %}
-                        >
-                        Daily
-                    </label>&nbsp;
-                    <label>
-                        <input
-                            name="reports_duration"
-                            type="radio"
-                            value="7"
-                            {% if profile.reports_duration == 7 %} checked {% endif %}
-                        >
-                        Weekly
-                    </label>&nbsp;
-                    <label>
-                        <input
-                            name="reports_duration"
-                            type="radio"
-                            value="30"
-                            {% if profile.reports_duration == 30 %} checked {% endif %}
+                {% if show_report_form %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <h2>Periodic Reports</h2>
+                        <label>
+                            <input
+                                id="reports"
+                                name="reports_allowed"
+                                type="checkbox"
+                                {% if profile.reports_allowed %} checked {% endif %}>
+                                Send me a summary of my checks
+                        </label></br>
+                        Select report duration:&nbsp; 
+                        <label>
+                            <input
+                                name="reports_duration"
+                                type="radio"
+                                value="1"
+                                {% if profile.reports_duration == 1 %} checked {% endif %}
                             >
-                        Monthly
-                    </label>
-                    </br>
-                    <button
-                        name="update_reports_allowed"
-                        type="submit"
-                        class="btn btn-default pull-right">Save</button>
-                </form>
+                            Daily
+                        </label>&nbsp;
+                        <label>
+                            <input
+                                name="reports_duration"
+                                type="radio"
+                                value="7"
+                                {% if profile.reports_duration == 7 %} checked {% endif %}
+                            >
+                            Weekly
+                        </label>&nbsp;
+                        <label>
+                            <input
+                                name="reports_duration"
+                                type="radio"
+                                value="30"
+                                {% if profile.reports_duration == 30 %} checked {% endif %}
+                            >
+                            Monthly
+                        </label>
+                        </br>
+                        <button
+                            name="update_reports_allowed"
+                            type="submit"
+                            class="btn btn-default pull-right">Save</button>
+                    </form>
+                {% else %}
+                    <h2>Periodic Reports</h2>
+                    <p>Send me a summary of my checks: 
+                        <strong>
+                            {% if profile.reports_allowed == True %}
+                            {{ profile.refresh_from_db|default:'' }}
+                                Enabled
+                        </strong>
+                            <p>Report interval set: 
+                                <strong>
+                                    {% if profile.reports_duration is 1 %}
+                                        Daily
+                                        {% endif %}
+                                    {% if profile.reports_duration is 7 %}
+                                        Weekly
+
+                                        {% endif %}
+                                    {% if profile.reports_duration is 30 %}
+                                        Monthly
+                                    {% endif %}
+                                </strong>
+                            </p>
+                        <strong>
+                            {% else %}
+                                Disabled
+                            {% endif %}
+                        </strong>
+                    </p>
+                        <form method="post">
+                            {% csrf_token %}
+                            <button
+                                name="edit_reports_settings"
+                                type="submit"
+                                class="btn btn-default pull-right">Edit</button>
+                        </form>
+                {% endif %}
             </div>
         </div>
     </div>
