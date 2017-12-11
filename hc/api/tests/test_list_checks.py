@@ -21,6 +21,7 @@ class ListChecksTestCase(BaseTestCase):
         self.a2.last_ping = self.now
         self.a2.status = "up"
         self.a2.save()
+        
     def get(self):
         return self.client.get("/api/v1/checks/", HTTP_X_API_KEY="abc")
 

@@ -1,7 +1,6 @@
 from hc.api.models import Check
 from hc.test import BaseTestCase
 
-
 class PauseTestCase(BaseTestCase):
     '''
     Checks for the condition that the status is up

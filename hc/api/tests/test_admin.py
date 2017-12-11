@@ -5,7 +5,6 @@ from hc.api.transports import Pushbullet
 class ApiAdminTestCase(BaseTestCase):
     '''
     This checks a user and sets the user to be staff as well as superuser.
-
     '''
     def setUp(self):
         super(ApiAdminTestCase, self).setUp()
