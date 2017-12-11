@@ -1,24 +1,19 @@
 import json
-
 from hc.api.models import Channel, Check
 from hc.test import BaseTestCase
 
-
 class CreateCheckTestCase(BaseTestCase):
     URL = "/api/v1/checks/"
-
     def setUp(self):
         super(CreateCheckTestCase, self).setUp()
 
     def post(self, data, expected_error=None):
         response = self.client.post(self.URL, json.dumps(data),
                                     content_type="application/json")
-
         if expected_error:
             self.assertEqual(response.status_code, 400)
             # Assert that the expected error is the response error
             self.assertIn(str(expected_error), str(response._container))
-
         return response
 
     def test_it_works(self):
@@ -27,7 +22,6 @@ class CreateCheckTestCase(BaseTestCase):
         '''
         check = Check()
         check.n_pings = 10
-
         response = self.post({
             "api_key": "abc",
             "name": "Foo",
@@ -35,14 +29,11 @@ class CreateCheckTestCase(BaseTestCase):
             "timeout": 3600,
             "grace": 60
         })
-
         self.assertEqual(response.status_code, 201)
-
         doc = response.json()
         assert "ping_url" in doc
         self.assertEqual(doc["name"], "Foo")
         self.assertEqual(doc["tags"], "bar,baz")
-
         # Assert the expected last_ping and n_pings value
         self.assertEqual(check.last_ping, None)
         self.assertEqual(check.n_pings, 10)

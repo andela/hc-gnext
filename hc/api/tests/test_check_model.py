@@ -1,12 +1,9 @@
 from datetime import timedelta
-
 from django.test import TestCase
 from django.utils import timezone
 from hc.api.models import Check
 
-
 class CheckModelTestCase(TestCase):
-
     def test_it_strips_tags(self):
         '''
         tests for tags
@@ -29,10 +26,8 @@ class CheckModelTestCase(TestCase):
         Checks if the status works within the grace period.
         '''
         check = Check()
-
         check.status = "up"
         check.last_ping = timezone.now() - timedelta(days=1, minutes=30)
-
         self.assertTrue(check.in_grace_period())
         self.assertEqual(check.get_status(), "up")
 
@@ -41,15 +36,13 @@ class CheckModelTestCase(TestCase):
         Checks if status paused its not in grace period.
         '''
         check = Check()
-
         check.status = "up"
         check.last_ping = timezone.now() - timedelta(days=1, minutes=30)
         self.assertTrue(check.in_grace_period())
-
         check.status = "paused"
         self.assertFalse(check.in_grace_period())
 
-    # Test that when a new check is created, it is not in the grace periodd
+    #Test that when a new check is created, it is not in the grace periodd
     def test_new_check_is_not_in_grace_period(self):
         '''
         Checks new check is not in grace period.

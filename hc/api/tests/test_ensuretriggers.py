@@ -1,14 +1,10 @@
 from datetime import timedelta
-
 from django.test import TestCase
 from django.utils import timezone
-
 from hc.api.management.commands.ensuretriggers import Command
 from hc.api.models import Check
 
-
 class EnsureTriggersTestCase(TestCase):
-
     def test_ensure_triggers(self):
         '''
         checks that trigger for cron jobs are working.

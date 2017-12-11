@@ -4,7 +4,6 @@ from django.core.signing import base64_hmac
 from hc.api.models import Check
 from hc.test import BaseTestCase
 
-
 class BadgeTestCase(BaseTestCase):
 
     def setUp(self):
