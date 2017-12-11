@@ -177,7 +177,6 @@ def profile(request):
             form = ReportSettingsForm(request.POST)
             if form.is_valid():
                 profile.reports_allowed = form.cleaned_data["reports_allowed"]
-                # if form.cleaned_data["reports_allowed"]:
                 now = timezone.now()
                 seconds = form.cleaned_data["reports_duration"]
                 profile.next_report_date = now + timedelta(seconds=int(seconds))
