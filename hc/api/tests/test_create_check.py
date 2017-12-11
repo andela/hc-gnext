@@ -36,7 +36,7 @@ class CreateCheckTestCase(BaseTestCase):
             "grace": 60
         })
 
-        self.assertEqual(re.status_code, 201)
+        self.assertEqual(response.status_code, 201)
 
         doc = response.json()
         assert "ping_url" in doc
