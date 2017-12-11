@@ -3,7 +3,7 @@ from django.core import mail
 from django.test import override_settings
 from hc.api.models import Channel, Check, Notification
 from hc.test import BaseTestCase
-from mock import patch
+from unittest.mock import patch
 from requests.exceptions import ConnectionError, Timeout
 
 class NotifyTestCase(BaseTestCase):
@@ -85,7 +85,7 @@ class NotifyTestCase(BaseTestCase):
         self.channel.notify(self.check)
         n = Notification.objects.get()
         self.assertEqual(n.error, "")
-        And email should have been sent
+        #And email should have been sent
         self.assertEqual(len(mail.outbox), 1)
 
     def test_it_skips_unverified_email(self):
