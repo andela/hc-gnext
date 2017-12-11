@@ -111,9 +111,7 @@ if os.environ.get("DB") == "mysql":
         }
     }
 
-DATABASES = {
-    'default': dj_database_url.config()
-}
+DATABASES['default'] = dj_database_url.config()
 
 LANGUAGE_CODE = 'en-us'
 
