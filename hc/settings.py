@@ -81,10 +81,7 @@ TEST_RUNNER = 'hc.api.tests.CustomRunner'
 
 # Default database engine is SQLite. So one can just check out code,
 # install requirements.txt and do manage.py runserver and it works
-DATABASES = {
-    'default': dj_database_url.config()
-    
-    }
+DATABASES = { 'default': dj_database_url.config() }
 
 # You can switch database engine to postgres or mysql using environment
 # variable 'DB'. Travis CI does this.
