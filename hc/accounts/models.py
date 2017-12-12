@@ -12,6 +12,12 @@ from django.urls import reverse
 from django.utils import timezone
 from hc.lib import emails
 
+SCHEDULE_CHOICES = (
+    (1, 'Daily'),
+    (7, 'Weekly'),
+    (30, 'Monthly')
+)
+
 
 class Profile(models.Model):
     # Owner:
@@ -24,11 +30,6 @@ class Profile(models.Model):
     token = models.CharField(max_length=128, blank=True)
     api_key = models.CharField(max_length=128, blank=True)
     current_team = models.ForeignKey("self", null=True)
-    SCHEDULE_CHOICES = (
-        (1, 'Daily'),
-        (7, 'Weekly'),
-        (30, 'Monthly')
-    )
     reports_duration = models.IntegerField(default=30, choices=SCHEDULE_CHOICES)
 
     def __str__(self):
