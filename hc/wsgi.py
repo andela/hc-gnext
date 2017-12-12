@@ -7,10 +7,14 @@ https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
 
 import os
 
+<<<<<<< HEAD
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hc.settings")
+=======
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hc.settings_production")
+>>>>>>> Added production settings file.
 
 from whitenoise.django import DjangoWhiteNoise
 from django.core.wsgi import get_wsgi_application
