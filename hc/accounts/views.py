@@ -98,6 +98,7 @@ def logout(request):
 def login_link_sent(request):
     return render(request, "accounts/login_link_sent.html")
 
+
 @login_required
 def reports(request):
     if request.method == "GET":
@@ -105,6 +106,7 @@ def reports(request):
             "checks": request.user.check_set.order_by("created")
             }
         return render(request, "accounts/reports.html", ctx)
+
 
 def set_password_link_sent(request):
     return render(request, "accounts/set_password_link_sent.html")
@@ -165,7 +167,7 @@ def profile(request):
         elif "show_api_key" in request.POST:
             show_api_key = True
         # toggle between show edit report form and saved report settings
-        elif  "edit_reports_settings" in request.POST:
+        elif "edit_reports_settings" in request.POST:
             show_report_form = True
         elif "update_reports_allowed" in request.POST:
             form = ReportSettingsForm(request.POST)
