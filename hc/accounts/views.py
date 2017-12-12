@@ -178,9 +178,9 @@ def profile(request):
             if form.is_valid():
                 profile.reports_allowed = form.cleaned_data["reports_allowed"]
                 now = timezone.now()
-                seconds = form.cleaned_data["reports_duration"]
-                profile.next_report_date = now + timedelta(seconds=int(seconds))
-                profile.reports_duration = seconds
+                days = form.cleaned_data["reports_duration"]
+                profile.next_report_date = now + timedelta(days=int(days))
+                profile.reports_duration = days
                 profile.save()
                 messages.success(request, "Your settings have been updated!")
                 show_report_form = False
