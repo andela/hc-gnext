@@ -94,8 +94,7 @@ if os.environ.get("DB") == "postgres":
     DATABASES = {
         'default': dj_database_url.config()
         }
-    }
-
+    
 if os.environ.get("DB") == "mysql":
     DATABASES = {
         'default': {
