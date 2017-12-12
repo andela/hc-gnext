@@ -101,11 +101,11 @@ def login_link_sent(request):
 @login_required
 def reports(request):
     if request.method == "GET":
-        result = Profile.objects.filter(user=request.user)
-        return render(request, "accounts/reports.html", {"checks": request.user.check_set.order_by("created")})
+        ctx = {
+            "checks": request.user.check_set.order_by("created")
+            }
+        return render(request, "accounts/reports.html", ctx)
 
-
-  
 def set_password_link_sent(request):
     return render(request, "accounts/set_password_link_sent.html")
 
