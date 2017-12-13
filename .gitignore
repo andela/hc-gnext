@@ -11,5 +11,3 @@ hc-venv
 .vscode/
 .cache/
 htmlcov/
-Procfile
-runtime.txt
