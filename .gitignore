@@ -12,5 +12,4 @@ hc-venv
 .cache/
 htmlcov/
 Procfile
-hc-venv/
 runtime.txt
