@@ -80,12 +80,6 @@ TEST_RUNNER = 'hc.api.tests.CustomRunner'
 DATABASES = {
     'default': dj_database_url.config()
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME':   './hc.sqlite',
-#     }
-# }
 
 # You can switch database engine to postgres or mysql using environment
 # variable 'DB'. Travis CI does this.
