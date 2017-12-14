@@ -114,7 +114,11 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-SITE_ROOT = "https://hc-task-2.herokuapp.com"
+# If the SITE_ROOT doesn't work for now,
+# please revert to the one commented below
+# SITE_ROOT = "https://hc-task-2.herokuapp.com"
+
+SITE_ROOT = "https://dev-gnext.herokuapp.com"
 PING_ENDPOINT = SITE_ROOT + "/ping/"
 PING_EMAIL_DOMAIN = HOST
 STATIC_URL = '/static/'
@@ -126,9 +130,8 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
-COMPRESS_OFFLINE = True
 
-EMAIL_BACKEND = "djmail.backends.default.EmailBackend"
+COMPRESS_OFFLINE = True
 
 # smtp server config
 DJMAIL_REAL_BACKEND = 'djmail.backends.async.EmailBackend'
