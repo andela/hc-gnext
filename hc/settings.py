@@ -47,6 +47,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'hc.accounts.middleware.TeamAccessMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -164,3 +165,16 @@ if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
 else:
     warnings.warn("local_settings.py not found, using defaults")
 
+<<<<<<< HEAD
+=======
+# smtp server config
+DJMAIL_REAL_BACKEND = 'djmail.backends.async.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # your email
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # your password
+EMAIL_USE_TLS = True
+
+
+>>>>>>> [feature #153114592] whitenoise added to handle static files
