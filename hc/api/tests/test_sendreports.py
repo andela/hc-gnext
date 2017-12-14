@@ -17,7 +17,7 @@ class SendReportsTestCase(BaseTestCase):
 
     @mock.patch("hc.api.management.commands.sendreports.num_pinged_checks")
     @freeze_time("2018-01-12 06:33:24", tz_offset=+0)
-    def test_handle_month_run_sends_email(self, mock_pings):
+    def test_handle_one_run_sends_monthly_email(self, mock_pings):
         """
         Test a user who subscribed to monthly reports
         receives a report at the next report date
@@ -28,12 +28,12 @@ class SendReportsTestCase(BaseTestCase):
             )
         self.profile.save()
         mock_pings.return_value = 1
-        result = Command().handle_month_run()
-        self.assertEqual(result, 2)
+        result = Command().handle_one_run(30)
+        self.assertEqual(result, 1)
 
     @mock.patch("hc.api.management.commands.sendreports.num_pinged_checks")
     @freeze_time("2017-12-30 06:33:24", tz_offset=+0)
-    def test_handle_month_run_does_not_send_email(self, mock_pings):
+    def test_handle_one_run_does_not_send_monthly_email(self, mock_pings):
         """
         Test a user who subscribed to monthly reports does not receive
         a report until the next report date
@@ -44,12 +44,12 @@ class SendReportsTestCase(BaseTestCase):
             )
         self.profile.save()
         mock_pings.return_value = 1
-        result = Command().handle_month_run()
+        result = Command().handle_one_run(30)
         self.assertEqual(result, 0)
 
     @mock.patch("hc.api.management.commands.sendreports.num_pinged_checks")
     @freeze_time("2017-12-19 06:33:24", tz_offset=+0)
-    def test_handle_week_run_sends_email(self, mock_pings):
+    def test_handle_one_run_sends_weekly_email(self, mock_pings):
         """
         Test a user who subscribed to weekly reports receives
         a report at the next report date
@@ -60,12 +60,12 @@ class SendReportsTestCase(BaseTestCase):
             )
         self.profile.save()
         mock_pings.return_value = 1
-        result = Command().handle_week_run()
+        result = Command().handle_one_run(7)
         self.assertEqual(result, 1)
 
     @mock.patch("hc.api.management.commands.sendreports.num_pinged_checks")
     @freeze_time("2017-12-14 06:33:24", tz_offset=+0)
-    def test_handle_week_run_does_not_send_email(self, mock_pings):
+    def test_handle_one_run_does_not_send_weekly_email(self, mock_pings):
         """
         Test a user who subscribed to weekly reports does not receive
         a report until the next report date
@@ -76,12 +76,12 @@ class SendReportsTestCase(BaseTestCase):
             )
         self.profile.save()
         mock_pings.return_value = 1
-        result = Command().handle_week_run()
+        result = Command().handle_one_run(7)
         self.assertEqual(result, 0)
 
     @mock.patch("hc.api.management.commands.sendreports.num_pinged_checks")
     @freeze_time("2017-12-13 06:33:24", tz_offset=+0)
-    def test_daily_run_sends_email(self, mock_pings):
+    def test_handle_one_run_sends_daily_email(self, mock_pings):
         """
         Test a user who subscribed to daily reports receives
         a report at the next report date
@@ -92,12 +92,12 @@ class SendReportsTestCase(BaseTestCase):
             )
         self.profile.save()
         mock_pings.return_value = 1
-        result = Command().handle_daily_run()
+        result = Command().handle_one_run(1)
         self.assertEqual(result, 1)
 
     @mock.patch("hc.api.management.commands.sendreports.num_pinged_checks")
     @freeze_time("2017-12-12 06:33:24", tz_offset=+0)
-    def test_daily_run_does_not_send_email(self, mock_pings):
+    def test_one_run_does_not_send_daily_email(self, mock_pings):
         """
         Test a user who subscribed to daily reports does not receive
         a report until the next report date
@@ -108,5 +108,5 @@ class SendReportsTestCase(BaseTestCase):
             )
         self.profile.save()
         mock_pings.return_value = 1
-        result = Command().handle_daily_run()
+        result = Command().handle_one_run(1)
         self.assertEqual(result, 0)
