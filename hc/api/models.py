@@ -41,7 +41,7 @@ class Check(models.Model):
         # sendalerts command will query using these
         index_together = ["status", "user", "alert_after"]
 
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100, blank=True, error_messages={'blank': 'Please make sure name is string!'})
     tags = models.CharField(max_length=500, blank=True)
     code = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
     user = models.ForeignKey(User, blank=True, null=True)
