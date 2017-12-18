@@ -28,6 +28,7 @@
         <tr class="channel-row">
             <td>
             {% if ch.kind == "email" %} Email {% endif %}
+            {% if ch.kind == "sms" %} SMS {% endif %}
             {% if ch.kind == "webhook" %} Webhook {% endif %}
             {% if ch.kind == "slack" %} Slack {% endif %}
             {% if ch.kind == "hipchat" %} HipChat {% endif %}
