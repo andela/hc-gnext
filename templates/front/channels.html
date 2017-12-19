@@ -21,8 +21,11 @@
             {% for ch in channels %}
             <tr class="channel-row">
                 <td>
-                    {% if ch.kind == "email" %} Email {% endif %} {% if ch.kind == "aft" %} AfricasTalking {% endif %} {% if ch.kind == "webhook" %} Webhook {% endif %} {% if ch.kind == "slack" %} Slack {% endif %} {% if ch.kind == "hipchat" %} HipChat {% endif %} {% if
-                    ch.kind == "pd" %} PagerDuty {% endif %} {% if ch.kind == "po" %} Pushover {% endif %} {% if ch.kind == "victorops" %} VictorOps {% endif %} {% if ch.kind == "pushbullet" %} Pushbullet {% endif %}
+                    {% if ch.kind == "email" %} Email {% endif %} {% if ch.kind == "aft" %} AfricasTalking {% endif %}
+                    {% if ch.kind == "webhook" %} Webhook {% endif %} {% if ch.kind == "slack" %} Slack {% endif %}
+                    {% if ch.kind == "hipchat" %} HipChat {% endif %} {% if ch.kind == "pd" %} PagerDuty {% endif %}
+                    {% if ch.kind == "po" %} Pushover {% endif %} {% if ch.kind == "victorops" %} VictorOps {% endif %}
+                    {% if ch.kind == "pushbullet" %} Pushbullet {% endif %}
                 </td>
                 <td class="value-cell">
                     {% if ch.kind == "email" %}
