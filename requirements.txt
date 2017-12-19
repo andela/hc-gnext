@@ -1,10 +1,12 @@
 coverage==4.4.2
+dj-database-url==0.4.2
 django-appconf==1.0.1
 django-ses-backend==0.1.1
 Django==1.10
 django_compressor==2.1
 djmail==0.11.0
 futures==3.0.3
+freezegun==0.3.9
 pep8==1.7.1
 premailer==2.9.6
 psycopg2==2.7.3.2
