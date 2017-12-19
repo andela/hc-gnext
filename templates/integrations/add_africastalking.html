@@ -8,7 +8,7 @@
         <h2>Integration Settings</h2>
         <form method="post" class="form-horizontal" action="{% url 'hc-add-channel' %}">
             {% csrf_token %}
-            <input type="hidden" name="kind" value="sms" />
+            <input type="hidden" name="kind" value="aft" />
             <div class="form-group">
                 <div class="row">
                     <label for="id_sms" class="col-sm-2 control-label">Username</label>
