@@ -150,6 +150,8 @@ class Channel(models.Model):
     user = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True)
     kind = models.CharField(max_length=20, choices=CHANNEL_KINDS)
+    username = models.CharField(max_length=20, help_text="AfricasTalking username", blank=True)
+    api_key = models.CharField(max_length=80, null=True, blank=True)
     value = models.TextField(blank=True)
     email_verified = models.BooleanField(default=False)
     checks = models.ManyToManyField(Check)
