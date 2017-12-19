@@ -33,6 +33,19 @@ class AddChannelForm(forms.ModelForm):
         return value.strip()
 
 
+class AddAfricasTalkingForm(forms.ModelForm):
+
+    class Meta:
+        model = Channel
+        fields = ['kind', 'username', 'api_key', 'value']
+
+    def clean_value(self):
+        value = self.cleaned_data["value"]
+        return value.strip()
+
+
+
+
 class AddWebhookForm(forms.Form):
     error_css_class = "has-error"
 
