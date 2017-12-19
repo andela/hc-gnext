@@ -366,9 +366,9 @@ def add_email(request):
     return render(request, "integrations/add_email.html", ctx)
 
 @login_required
-def add_sms(request):
+def add_africastalking(request):
     ctx = {"page": "channels"}
-    return render(request, "integrations/add_sms.html", ctx)
+    return render(request, "integrations/add_africastalking.html", ctx)
 
 
 @login_required
