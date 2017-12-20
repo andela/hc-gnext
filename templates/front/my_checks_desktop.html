@@ -23,7 +23,7 @@
             {% elif check.in_grace_period %}
                 <span class="status icon-grace"></span>
             {% elif check.in_reverse_grace %}
-                <span class="status icon-early"></span>
+                <span class="status icon-early">early</span>
             {% elif check.get_status == "up" %}
                 <span class="status icon-up"></span>
             {% elif check.get_status == "fast" %}

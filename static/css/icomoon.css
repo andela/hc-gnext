@@ -45,6 +45,9 @@
 .icon-grace:before {
   content: "\e000";
 }
+.icon-early:before {
+  content: "\e002";
+}
 .icon-missing:before {
   content: "\e001";
 }
@@ -59,4 +62,7 @@
 }
 .icon-settings:before {
   content: "\e8b8";
+}
+.icon-fast:before {
+  content: "\e9a5";
 }
