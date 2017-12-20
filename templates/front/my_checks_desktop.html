@@ -22,12 +22,14 @@
                     data-toggle="tooltip" title="Monitoring paused. Ping to resume."></span>
             {% elif check.in_grace_period %}
                 <span class="status icon-grace"></span>
+            {% elif check.in_reverse_grace %}
+                <span class="status icon-early"></span>
             {% elif check.get_status == "up" %}
                 <span class="status icon-up"></span>
             {% elif check.get_status == "down" %}
                 <span class="status icon-down"></span>
             {% elif check.get_status == "fast" %}
-                <span class="status icon-fast">fast</span>
+                <span class="status icon-fast"></span>
             {% endif %}
         </td>
         <td class="name-cell">
