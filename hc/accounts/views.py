@@ -128,6 +128,12 @@ def check_token(request, username, token):
 
     return render(request, "accounts/check_token_submit.html")
 
+@login_required
+def dashboard(request):
+    if request.method == "GET":
+        checks = Check.objects.filter(user=request.user)
+        return render(request, "accounts/dashboard.html", {'checks': checks})
+
 
 @login_required
 def profile(request):
@@ -284,3 +290,4 @@ def switch_team(request, target_username):
     request.user.profile.save()
 
     return redirect("hc-checks")
+
