@@ -61,6 +61,8 @@ body {
 .status.icon-up.new, .status.icon-paused { color: #CCC; }
 .status.icon-grace { color: #f0ad4e; }
 .status.icon-down { color: #d9534f; }
+.status.icon-fast {color: #ff8c00; }
+.status.status.icon-early {color: #81c784}
 
 span.glyphicon.glyphicon-hourglass{ color:red; font-size: 20px}
 

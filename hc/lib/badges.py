@@ -16,7 +16,8 @@ COLORS = {
     "up": "#4c1",
     "late": "#fe7d37",
     "down": "#e05d44",
-    "fast": "#ff6347"
+    "fast": "#ff6347",
+    "early": "#81c784"
 }
 
 
