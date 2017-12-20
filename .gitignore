@@ -4,15 +4,13 @@ __pycache__/
 hc.sqlite
 hc/local_settings.py
 static-collected
-
+static/
 .DS_Store
-static/.DS_Store
+.vscode
 virtualenv
 .idea
 venv
 .noseids
 .coverage
-hc-venv
-.vscode/
 .cache/
 htmlcov/

@@ -119,6 +119,8 @@ if os.environ.get("DB") == "mysql":
         }
     }
 
+DATABASES['default'] = dj_database_url.config()
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -135,20 +137,13 @@ PING_EMAIL_DOMAIN = HOST
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static-collected')
-
-#whitenoise
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
-COMPRESS_OFFLINE = True
 
-#EMAIL_BACKEND = "djmail.backends.default.EmailBackend"
+COMPRESS_OFFLINE = True
 
 # Slack integration -- override these in local_settings
 SLACK_CLIENT_ID = None
