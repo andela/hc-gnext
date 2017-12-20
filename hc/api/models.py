@@ -151,7 +151,7 @@ class Channel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     kind = models.CharField(max_length=20, choices=CHANNEL_KINDS)
     username = models.CharField(max_length=20, help_text="AfricasTalking username", blank=True)
-    api_key = models.CharField(max_length=80, null=True, blank=True)
+    api_key = models.CharField(max_length=80, null=True, blank=True, default="")
     value = models.TextField(blank=True)
     email_verified = models.BooleanField(default=False)
     checks = models.ManyToManyField(Check)
@@ -175,6 +175,8 @@ class Channel(models.Model):
     def transport(self):
         if self.kind == "email":
             return transports.Email(self)
+        elif self.kind == "aft":
+            return transports.AfricasTalking(self)
         elif self.kind == "webhook":
             return transports.Webhook(self)
         elif self.kind == "slack":
