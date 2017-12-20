@@ -1,3 +1,4 @@
+AfricastalkingGateway==1.9
 coverage==4.4.2
 django-appconf==1.0.1
 django-ses-backend==0.1.1
