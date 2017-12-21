@@ -1,3 +1,4 @@
+AfricastalkingGateway==1.9
 coverage==4.4.2
 dj-database-url==0.4.2
 django-appconf==1.0.1

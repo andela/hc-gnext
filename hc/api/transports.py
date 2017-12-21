@@ -5,7 +5,7 @@ import json
 import requests
 from six.moves.urllib.parse import quote
 
-from hc.lib import emails
+from hc.lib import emails, sms
 
 
 def tmpl(template_name, **ctx):
@@ -39,6 +39,19 @@ class Transport(object):
 
     def checks(self):
         return self.channel.user.check_set.order_by("created")
+
+
+class AfricasTalking(Transport):
+    def notify(self, check):
+        if self.channel.api_key is "":
+            return "API Key missing"
+
+        ctx = {
+            'check': check,
+            'channel': self.channel
+        }
+
+        return sms.send_sms(ctx)
 
 
 class Email(Transport):
