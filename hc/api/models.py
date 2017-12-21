@@ -20,8 +20,10 @@ STATUSES = (
 	("paused", "Paused"),
 	("fast", "Fast")
 )
+
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
+DEFAULT_NAG = td(hours=1)
 
 CHANNEL_KINDS = (("email", "Email"),
                  ("aft", "AfricasTalking"),
@@ -42,71 +44,74 @@ PO_PRIORITIES = {
 
 
 class Check(models.Model):
+    class Meta:
+        # sendalerts command will query using these
+        index_together = ["status", "user", "alert_after"]
 
-	class Meta:
-		# sendalerts command will query using these
-		index_together = ["status", "user", "alert_after"]
+    name = models.CharField(max_length=100, blank=True, error_messages={'blank': 'Please make sure name is string!'})
+    tags = models.CharField(max_length=500, blank=True)
+    code = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
+    user = models.ForeignKey(User, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    timeout = models.DurationField(default=DEFAULT_TIMEOUT)
+    grace = models.DurationField(default=DEFAULT_GRACE)
+    n_pings = models.IntegerField(default=0)
+    last_ping = models.DateTimeField(null=True, blank=True)
+    alert_after = models.DateTimeField(null=True, blank=True, editable=False)
+    status = models.CharField(max_length=6, choices=STATUSES, default="new")
+    interval = models.DurationField(default=DEFAULT_NAG)
+    nag_status = models.BooleanField(default=True)
+    nag_after = models.DateTimeField(null=True)
 
-	name = models.CharField(max_length=100, blank=True, error_messages={'blank': 'Please make sure name is string!'})
-	tags = models.CharField(max_length=500, blank=True)
-	code = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
-	user = models.ForeignKey(User, blank=True, null=True)
-	created = models.DateTimeField(auto_now_add=True)
-	timeout = models.DurationField(default=DEFAULT_TIMEOUT)
-	grace = models.DurationField(default=DEFAULT_GRACE)
-	n_pings = models.IntegerField(default=0)
-	last_ping = models.DateTimeField(null=True, blank=True)
-	alert_after = models.DateTimeField(null=True, blank=True, editable=False)
-	status = models.CharField(max_length=6, choices=STATUSES, default="new")
+    def name_then_code(self):
+        if self.name:
+            return self.name
 
-	def name_then_code(self):
-		if self.name:
-			return self.name
+        return str(self.code)
 
-		return str(self.code)
+    def url(self):
+        return settings.PING_ENDPOINT + str(self.code)
 
-	def url(self):
-		return settings.PING_ENDPOINT + str(self.code)
+    def log_url(self):
+        return settings.SITE_ROOT + reverse("hc-log", args=[self.code])
 
-	def log_url(self):
-		return settings.SITE_ROOT + reverse("hc-log", args=[self.code])
+    def email(self):
+        return "%s@%s" % (self.code, settings.PING_EMAIL_DOMAIN)
 
-	def email(self):
-		return "%s@%s" % (self.code, settings.PING_EMAIL_DOMAIN)
+    def send_alert(self):
+        if self.status not in ("up", "down", "fast"):
+            raise NotImplementedError("Unexpected status: %s" % self.status)
 
-	def send_alert(self):
-		if self.status not in ("up", "down", "fast"):
-			raise NotImplementedError("Unexpected status: %s" % self.status)
+        errors = []
+        for channel in self.channel_set.all():
+            error = channel.notify(self)
+            if error not in ("", "no-op"):
+                errors.append((channel, error))
 
-		errors = []
-		for channel in self.channel_set.all():
-			error = channel.notify(self)
-			if error not in ("", "no-op"):
-				errors.append((channel, error))
+        return errors
 
-		return errors
+    def get_status(self):
+        if self.status in ("new", "paused"):
+            return self.status
 
-	def get_status(self):
-		if self.status in ("new", "paused"):
-			return self.status
+        now = timezone.now()
+        if self.last_ping + self.timeout - self.grace > now:
+			      return "fast"
+          
+        if self.last_ping + self.timeout + self.grace > now:
+            return "up"
 
-		now = timezone.now()
+        return "down"
 
-		if self.last_ping + self.timeout - self.grace > now:
-			return "fast"
-		elif self.last_ping + self.timeout + self.grace > now:
-			return "up"
-		return "down"
+    def in_grace_period(self):
+        if self.status in ("new", "paused"):
+            return False
 
-	def in_grace_period(self):
-		if self.status in ("new", "paused"):
-			return False
-
-		up_ends = self.last_ping + self.timeout
-		grace_ends = up_ends + self.grace
-		return up_ends < timezone.now() < grace_ends
-
-	def in_reverse_grace(self):
+        up_ends = self.last_ping + self.timeout
+        grace_ends = up_ends + self.grace
+        return up_ends < timezone.now() < grace_ends
+     
+    def in_reverse_grace(self):
 		if self.status in ("new", "paused"):
 			return False
 
@@ -114,36 +119,37 @@ class Check(models.Model):
 		grace_begins = up_ends - self.grace
 		return grace_begins < timezone.now() < up_ends
 
-	def assign_all_channels(self):
-		if self.user:
-			channels = Channel.objects.filter(user=self.user)
-			self.channel_set.add(*channels)
+    def assign_all_channels(self):
+        if self.user:
+            channels = Channel.objects.filter(user=self.user)
+            self.channel_set.add(*channels)
 
-	def tags_list(self):
-		return [t.strip() for t in self.tags.split(" ") if t.strip()]
+    def tags_list(self):
+        return [t.strip() for t in self.tags.split(" ") if t.strip()]
 
-	def to_dict(self):
-		pause_rel_url = reverse("hc-api-pause", args=[self.code])
+    def to_dict(self):
+        pause_rel_url = reverse("hc-api-pause", args=[self.code])
 
-		result = {
-			"name": self.name,
-			"ping_url": self.url(),
-			"pause_url": settings.SITE_ROOT + pause_rel_url,
-			"tags": self.tags,
-			"timeout": int(self.timeout.total_seconds()),
-			"grace": int(self.grace.total_seconds()),
-			"n_pings": self.n_pings,
-			"status": self.get_status()
-		}
+        result = {
+            "name": self.name,
+            "ping_url": self.url(),
+            "pause_url": settings.SITE_ROOT + pause_rel_url,
+            "tags": self.tags,
+            "timeout": int(self.timeout.total_seconds()),
+            "grace": int(self.grace.total_seconds()),
+            "interval": int(self.interval.total_seconds()),
+            "n_pings": self.n_pings,
+            "status": self.get_status()
+        }
 
-		if self.last_ping:
-			result["last_ping"] = self.last_ping.isoformat()
-			result["next_ping"] = (self.last_ping + self.timeout).isoformat()
-		else:
-			result["last_ping"] = None
-			result["next_ping"] = None
+        if self.last_ping:
+            result["last_ping"] = self.last_ping.isoformat()
+            result["next_ping"] = (self.last_ping + self.timeout).isoformat()
+        else:
+            result["last_ping"] = None
+            result["next_ping"] = None
 
-		return result
+        return result
 
 
 class Ping(models.Model):
