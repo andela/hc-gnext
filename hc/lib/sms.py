@@ -1,4 +1,3 @@
-# Import the helper gateway class
 from africastalking.AfricasTalkingGateway import AfricasTalkingGateway, AfricasTalkingGatewayException
 
 from hc.front.templatetags.hc_extras import hc_duration
@@ -10,16 +9,10 @@ class AfricasTalkingSMS(object):
 
     def send(self, recipients, message):
         try:
-            results = self.gateway.sendMessage(recipients, message)
+            self.gateway.sendMessage(recipients, message)
 
-            for recipient in results:
-                # status is either "Success" or "error message"
-                print('number=%s;status=%s;messageId=%s;cost=%s' % (recipient['number'],
-                                                                    recipient['status'],
-                                                                    recipient['messageId'],
-                                                                    recipient['cost']))
         except AfricasTalkingGatewayException as e:
-            print('Encountered an error while sending: %s' % str(e))
+            return 'Encountered an error while sending: %s' % str(e)
 
 
 def send_sms(ctx):
@@ -30,7 +23,7 @@ def send_sms(ctx):
     if check and channel:
         username, api_key, recipients = channel.username, channel.api_key, channel.value
         message = """
-        \tHEALTH-CHEKS ALERT!!
+HEALTH-CHECKS ALERT!!
         Name: %(name)s\n
         Status: %(status)s\n
         Period: %(period)s\n
