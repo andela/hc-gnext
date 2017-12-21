@@ -1,18 +1,20 @@
 $(function () {
-
     var MINUTE = {name: "minute", nsecs: 60};
     var HOUR = {name: "hour", nsecs: MINUTE.nsecs * 60};
     var DAY = {name: "day", nsecs: HOUR.nsecs * 24};
     var WEEK = {name: "week", nsecs: DAY.nsecs * 7};
-    var UNITS = [WEEK, DAY, HOUR, MINUTE];
+    var MONTH = {name: "month", nsecs: DAY.nsecs * 30};
+    var YEAR = {name: "year", nsecs: MONTH.nsecs * 12};
+
+    var UNITS = [YEAR, MONTH, WEEK, DAY, HOUR, MINUTE];
 
     var secsToText = function (total) {
         var remainingSeconds = Math.floor(total);
         var result = "";
-        for (var i = 0, unit; unit = UNITS[i]; i++) {
+        for (var i = 0, unit; (unit = UNITS[i]); i++) {
             if (unit === WEEK && remainingSeconds % unit.nsecs !== 0) {
                 // Say "8 days" instead of "1 week 1 day"
-                continue
+                continue;
             }
 
             var count = Math.floor(remainingSeconds / unit.nsecs);
@@ -35,15 +37,16 @@ $(function () {
         start: [20],
         connect: "lower",
         range: {
-            'min': [60, 60],
-            '33%': [3600, 3600],
-            '66%': [86400, 86400],
-            '83%': [604800, 604800],
-            'max': 2592000
+            min: [60, 60], // 1 minute
+            "20%": [3600, 3600], // 1 hour
+            "40%": [86400, 86400], // 1 day
+            "55%": [604800, 604800], // 1 week
+            "70%": [2592000, 2592000], // 1 month
+            max: 31104000 // 1 year
         },
         pips: {
-            mode: 'values',
-            values: [60, 1800, 3600, 43200, 86400, 604800, 2592000],
+            mode: "values",
+            values: [60, 3600, 86400, 604800, 2592000, 31104000],
             density: 4,
             format: {
                 to: secsToText,
@@ -59,21 +62,21 @@ $(function () {
         $("#update-timeout-timeout").val(rounded);
     });
 
-
     var graceSlider = document.getElementById("grace-slider");
     noUiSlider.create(graceSlider, {
         start: [20],
         connect: "lower",
         range: {
-            'min': [60, 60],
-            '33%': [3600, 3600],
-            '66%': [86400, 86400],
-            '83%': [604800, 604800],
-            'max': 2592000
+            min: [60, 60], // 1 minute
+            "20%": [3600, 3600], // 1 hour
+            "40%": [86400, 86400], // 1 day
+            "55%": [604800, 604800], // 1 week
+            "70%": [2592000, 2592000], // 1 month
+            max: 31104000 // 1 year
         },
         pips: {
-            mode: 'values',
-            values: [60, 1800, 3600, 43200, 86400, 604800, 2592000],
+            mode: "values",
+            values: [60, 3600, 86400, 604800, 2592000, 31104000],
             density: 4,
             format: {
                 to: secsToText,
@@ -228,6 +231,4 @@ $(function () {
         var text = e.trigger.getAttribute("data-clipboard-text");
         prompt("Press Ctrl+C to select:", text)
     });
-
-
 });
