@@ -124,10 +124,9 @@ USE_L10N = True
 USE_TZ = True
 
 
-# SITE_ROOT = "https://nag-gnext.herokuapp.com"
-# SITE_ROOT = "http://localhost:8000"
+SITE_ROOT = "https://nag-gnext.herokuapp.com"
 
-SITE_ROOT = "https://dev-gnext.herokuapp.com"
+# SITE_ROOT = "https://dev-gnext.herokuapp.com"
 
 PING_ENDPOINT = SITE_ROOT + "/ping/"
 PING_EMAIL_DOMAIN = HOST
@@ -143,13 +142,15 @@ STATICFILES_FINDERS = (
 
 COMPRESS_OFFLINE = True
 
-# smtp server config
-DJMAIL_REAL_BACKEND = 'djmail.backends.async.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # your email
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # your password
+# # smtp server config
+# DJMAIL_REAL_BACKEND = 'djmail.backends.async.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # your email
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # your email
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # your password
+
 EMAIL_USE_TLS = True
 
 # Slack integration -- override these in local_settings
@@ -170,3 +171,4 @@ if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
     from .local_settings import *
 else:
     warnings.warn("local_settings.py not found, using defaults")
+
