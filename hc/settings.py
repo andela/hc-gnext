@@ -81,6 +81,9 @@ TEST_RUNNER = 'hc.api.tests.CustomRunner'
 # Default database engine is SQLite. So one can just check out code,
 # install requirements.txt and do manage.py runserver and it works
 DATABASES = {
+        'default': dj_database_url.config()
+        }
+
     'default': dj_database_url.config()
 }
 # DATABASES = {
@@ -89,6 +92,7 @@ DATABASES = {
 #         'NAME':   './hc.sqlite',
 #     }
 # }
+
 
 # You can switch database engine to postgres or mysql using environment
 # variable 'DB'. Travis CI does this.
@@ -126,7 +130,6 @@ PING_EMAIL_DOMAIN = HOST
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static-collected')
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -165,8 +168,6 @@ if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
 else:
     warnings.warn("local_settings.py not found, using defaults")
 
-<<<<<<< HEAD
-=======
 # smtp server config
 DJMAIL_REAL_BACKEND = 'djmail.backends.async.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -175,6 +176,3 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # your email
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # your password
 EMAIL_USE_TLS = True
-
-
->>>>>>> [feature #153114592] whitenoise added to handle static files
