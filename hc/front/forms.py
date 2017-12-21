@@ -18,8 +18,8 @@ class NameTagsForm(forms.Form):
 
 
 class TimeoutForm(forms.Form):
-    timeout = forms.IntegerField(min_value=60, max_value=2592000)
-    grace = forms.IntegerField(min_value=60, max_value=2592000)
+    timeout = forms.IntegerField(min_value=60, max_value=31104000)
+    grace = forms.IntegerField(min_value=60, max_value=31104000)
 
 
 class AddChannelForm(forms.ModelForm):
@@ -31,6 +31,19 @@ class AddChannelForm(forms.ModelForm):
     def clean_value(self):
         value = self.cleaned_data["value"]
         return value.strip()
+
+
+class AddAfricasTalkingForm(forms.ModelForm):
+
+    class Meta:
+        model = Channel
+        fields = ['kind', 'username', 'api_key', 'value']
+
+    def clean_value(self):
+        value = self.cleaned_data["value"]
+        return value.strip()
+
+
 
 
 class AddWebhookForm(forms.Form):

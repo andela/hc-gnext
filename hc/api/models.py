@@ -22,10 +22,15 @@ STATUSES = (
 )
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
-CHANNEL_KINDS = (("email", "Email"), ("webhook", "Webhook"),
-				 ("hipchat", "HipChat"),
-				 ("slack", "Slack"), ("pd", "PagerDuty"), ("po", "Pushover"),
-				 ("victorops", "VictorOps"))
+
+CHANNEL_KINDS = (("email", "Email"),
+                 ("aft", "AfricasTalking"),
+                 ("webhook", "Webhook"),
+                 ("hipchat", "HipChat"),
+                 ("slack", "Slack"),
+                 ("pd", "PagerDuty"),
+                 ("po", "Pushover"),
+                 ("victorops", "VictorOps"))
 
 PO_PRIORITIES = {
 	-2: "lowest",
@@ -152,116 +157,120 @@ class Ping(models.Model):
 
 
 class Channel(models.Model):
-	code = models.UUIDField(default=uuid.uuid4, editable=False)
-	user = models.ForeignKey(User)
-	created = models.DateTimeField(auto_now_add=True)
-	kind = models.CharField(max_length=20, choices=CHANNEL_KINDS)
-	value = models.TextField(blank=True)
-	email_verified = models.BooleanField(default=False)
-	checks = models.ManyToManyField(Check)
+    code = models.UUIDField(default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User)
+    created = models.DateTimeField(auto_now_add=True)
+    kind = models.CharField(max_length=20, choices=CHANNEL_KINDS)
+    username = models.CharField(max_length=20, help_text="AfricasTalking username", blank=True)
+    api_key = models.CharField(max_length=80, null=True, blank=True, default="")
+    value = models.TextField(blank=True)
+    email_verified = models.BooleanField(default=False)
+    checks = models.ManyToManyField(Check)
 
-	def assign_all_checks(self):
-		checks = Check.objects.filter(user=self.user)
-		self.checks.add(*checks)
+    def assign_all_checks(self):
+        checks = Check.objects.filter(user=self.user)
+        self.checks.add(*checks)
 
-	def make_token(self):
-		seed = "%s%s" % (self.code, settings.SECRET_KEY)
-		seed = seed.encode("utf8")
-		return hashlib.sha1(seed).hexdigest()
+    def make_token(self):
+        seed = "%s%s" % (self.code, settings.SECRET_KEY)
+        seed = seed.encode("utf8")
+        return hashlib.sha1(seed).hexdigest()
 
-	def send_verify_link(self):
-		args = [self.code, self.make_token()]
-		verify_link = reverse("hc-verify-email", args=args)
-		verify_link = settings.SITE_ROOT + verify_link
-		emails.verify_email(self.value, {"verify_link": verify_link})
+    def send_verify_link(self):
+        args = [self.code, self.make_token()]
+        verify_link = reverse("hc-verify-email", args=args)
+        verify_link = settings.SITE_ROOT + verify_link
+        emails.verify_email(self.value, {"verify_link": verify_link})
 
-	@property
-	def transport(self):
-		if self.kind == "email":
-			return transports.Email(self)
-		elif self.kind == "webhook":
-			return transports.Webhook(self)
-		elif self.kind == "slack":
-			return transports.Slack(self)
-		elif self.kind == "hipchat":
-			return transports.HipChat(self)
-		elif self.kind == "pd":
-			return transports.PagerDuty(self)
-		elif self.kind == "victorops":
-			return transports.VictorOps(self)
-		elif self.kind == "pushbullet":
-			return transports.Pushbullet(self)
-		elif self.kind == "po":
-			return transports.Pushover(self)
-		else:
-			raise NotImplementedError("Unknown channel kind: %s" % self.kind)
+    @property
+    def transport(self):
+        if self.kind == "email":
+            return transports.Email(self)
+        elif self.kind == "aft":
+            return transports.AfricasTalking(self)
+        elif self.kind == "webhook":
+            return transports.Webhook(self)
+        elif self.kind == "slack":
+            return transports.Slack(self)
+        elif self.kind == "hipchat":
+            return transports.HipChat(self)
+        elif self.kind == "pd":
+            return transports.PagerDuty(self)
+        elif self.kind == "victorops":
+            return transports.VictorOps(self)
+        elif self.kind == "pushbullet":
+            return transports.Pushbullet(self)
+        elif self.kind == "po":
+            return transports.Pushover(self)
+        else:
+            raise NotImplementedError("Unknown channel kind: %s" % self.kind)
 
-	def notify(self, check):
-		# Make 3 attempts--
-		for x in range(0, 3):
-			error = self.transport.notify(check) or ""
-			if error in ("", "no-op"):
-				break  # Success!
+    def notify(self, check):
+        # Make 3 attempts--
+        for x in range(0, 3):
+            error = self.transport.notify(check) or ""
+            if error in ("", "no-op"):
+                break  # Success!
 
-		if error != "no-op":
-			n = Notification(owner=check, channel=self)
-			n.check_status = check.status
-			n.error = error
-			n.save()
+        if error != "no-op":
+            n = Notification(owner=check, channel=self)
+            n.check_status = check.status
+            n.error = error
+            n.save()
 
-		return error
+        return error
 
-	def test(self):
-		return self.transport().test()
+    def test(self):
+        return self.transport().test()
 
-	@property
-	def po_value(self):
-		assert self.kind == "po"
-		user_key, prio = self.value.split("|")
-		prio = int(prio)
-		return user_key, prio, PO_PRIORITIES[prio]
+    @property
+    def po_value(self):
+        assert self.kind == "po"
+        user_key, prio = self.value.split("|")
+        prio = int(prio)
+        return user_key, prio, PO_PRIORITIES[prio]
 
-	@property
-	def value_down(self):
-		assert self.kind == "webhook"
-		parts = self.value.split("\n")
-		return parts[0]
+    @property
+    def value_down(self):
+        assert self.kind == "webhook"
+        parts = self.value.split("\n")
+        return parts[0]
 
-	@property
-	def value_up(self):
-		assert self.kind == "webhook"
-		parts = self.value.split("\n")
-		return parts[1] if len(parts) == 2 else ""
+    @property
+    def value_up(self):
+        assert self.kind == "webhook"
+        parts = self.value.split("\n")
+        return parts[1] if len(parts) == 2 else ""
 
-	@property
-	def slack_team(self):
-		assert self.kind == "slack"
-		if not self.value.startswith("{"):
-			return None
+    @property
+    def slack_team(self):
+        assert self.kind == "slack"
+        if not self.value.startswith("{"):
+            return None
 
-		doc = json.loads(self.value)
-		return doc["team_name"]
+        doc = json.loads(self.value)
+        return doc["team_name"]
 
-	@property
-	def slack_channel(self):
-		assert self.kind == "slack"
-		if not self.value.startswith("{"):
-			return None
+    @property
+    def slack_channel(self):
+        assert self.kind == "slack"
+        if not self.value.startswith("{"):
+            return None
 
-		doc = json.loads(self.value)
-		return doc["incoming_webhook"]["channel"]
+        doc = json.loads(self.value)
+        return doc["incoming_webhook"]["channel"]
 
-	@property
-	def slack_webhook_url(self):
-		assert self.kind == "slack"
-		if not self.value.startswith("{"):
-			return self.value
+    @property
+    def slack_webhook_url(self):
+        assert self.kind == "slack"
+        if not self.value.startswith("{"):
+            return self.value
 
-		doc = json.loads(self.value)
-		return doc["incoming_webhook"]["url"]
+        doc = json.loads(self.value)
+        return doc["incoming_webhook"]["url"]
 
-	def latest_notification(self):
-		return Notification.objects.filter(channel=self).latest()
+    def latest_notification(self):
+        return Notification.objects.filter(channel=self).latest()
 
 
 class Notification(models.Model):
