@@ -126,6 +126,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+
 SITE_ROOT = "https://dev-gnext.herokuapp.com"
 
 PING_ENDPOINT = SITE_ROOT + "/ping/"

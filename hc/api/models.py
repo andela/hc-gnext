@@ -21,9 +21,13 @@ STATUSES = (
 )
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
-CHANNEL_KINDS = (("email", "Email"), ("webhook", "Webhook"),
+CHANNEL_KINDS = (("email", "Email"),
+                 ("aft", "AfricasTalking"),
+                 ("webhook", "Webhook"),
                  ("hipchat", "HipChat"),
-                 ("slack", "Slack"), ("pd", "PagerDuty"), ("po", "Pushover"),
+                 ("slack", "Slack"),
+                 ("pd", "PagerDuty"),
+                 ("po", "Pushover"),
                  ("victorops", "VictorOps"))
 
 PO_PRIORITIES = {
@@ -146,6 +150,8 @@ class Channel(models.Model):
     user = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True)
     kind = models.CharField(max_length=20, choices=CHANNEL_KINDS)
+    username = models.CharField(max_length=20, help_text="AfricasTalking username", blank=True)
+    api_key = models.CharField(max_length=80, null=True, blank=True, default="")
     value = models.TextField(blank=True)
     email_verified = models.BooleanField(default=False)
     checks = models.ManyToManyField(Check)
@@ -169,6 +175,8 @@ class Channel(models.Model):
     def transport(self):
         if self.kind == "email":
             return transports.Email(self)
+        elif self.kind == "aft":
+            return transports.AfricasTalking(self)
         elif self.kind == "webhook":
             return transports.Webhook(self)
         elif self.kind == "slack":

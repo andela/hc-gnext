@@ -162,6 +162,8 @@ class ChannelsAdmin(admin.ModelAdmin):
             return "Pushbullet"
         elif obj.kind == "po":
             return "Pushover"
+        elif obj.kind == "aft":
+            return "AfricasTalking"
         elif obj.kind == "webhook":
             return "Webhook"
         elif obj.kind == "slack":
