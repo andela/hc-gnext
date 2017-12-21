@@ -92,9 +92,11 @@
         </form>
     </div>
 </div>
+{% endblock %} 
 
-
-{% endblock %} {% block scripts %} {% compress js %}
+{% block scripts %} 
+{% compress js %}
 <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
-{% endcompress %} {% endblock %}
+{% endcompress %} 
+{% endblock %}
