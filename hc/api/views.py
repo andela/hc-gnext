@@ -23,11 +23,16 @@ def ping(request, code):
 
     check.n_pings = F("n_pings") + 1
     check.last_ping = timezone.now()
-    if check.status in ("new", "paused"):
+    if check.get_status() in ("new", "paused"):
         check.status = "up"
-
+    # save fast status
+    if check.get_status() == "fast":
+        check.status = check.get_status()
     check.save()
     check.refresh_from_db()
+    # send alert for fast
+    if check.status == "fast":
+        check.send_alert()
 
     ping = Ping(owner=check)
     headers = request.META
@@ -106,8 +111,15 @@ def badge(request, username, signature, tag):
         if status == "up" and check.in_grace_period():
             status = "late"
 
+        if status == "up" and check.in_reverse_grace():
+            status = "early"
+
         if check.get_status() == "down":
             status = "down"
+            break
+
+        if check.get_status() == "fast":
+            status = "fast"
             break
 
     svg = get_badge_svg(tag, status)

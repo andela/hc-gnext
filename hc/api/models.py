@@ -14,10 +14,11 @@ from hc.api import transports
 from hc.lib import emails
 
 STATUSES = (
-    ("up", "Up"),
-    ("down", "Down"),
-    ("new", "New"),
-    ("paused", "Paused")
+	("up", "Up"),
+	("down", "Down"),
+	("new", "New"),
+	("paused", "Paused"),
+	("fast", "Fast")
 )
 
 DEFAULT_TIMEOUT = td(days=1)
@@ -34,16 +35,15 @@ CHANNEL_KINDS = (("email", "Email"),
                  ("victorops", "VictorOps"))
 
 PO_PRIORITIES = {
-    -2: "lowest",
-    -1: "low",
-    0: "normal",
-    1: "high",
-    2: "emergency"
+	-2: "lowest",
+	-1: "low",
+	0: "normal",
+	1: "high",
+	2: "emergency"
 }
 
 
 class Check(models.Model):
-
     class Meta:
         # sendalerts command will query using these
         index_together = ["status", "user", "alert_after"]
@@ -79,7 +79,7 @@ class Check(models.Model):
         return "%s@%s" % (self.code, settings.PING_EMAIL_DOMAIN)
 
     def send_alert(self):
-        if self.status not in ("up", "down"):
+        if self.status not in ("up", "down", "fast"):
             raise NotImplementedError("Unexpected status: %s" % self.status)
 
         errors = []
@@ -95,7 +95,9 @@ class Check(models.Model):
             return self.status
 
         now = timezone.now()
-
+        if self.last_ping + self.timeout - self.grace > now:
+			      return "fast"
+          
         if self.last_ping + self.timeout + self.grace > now:
             return "up"
 
@@ -108,6 +110,14 @@ class Check(models.Model):
         up_ends = self.last_ping + self.timeout
         grace_ends = up_ends + self.grace
         return up_ends < timezone.now() < grace_ends
+     
+    def in_reverse_grace(self):
+		if self.status in ("new", "paused"):
+			return False
+
+		up_ends = self.last_ping + self.timeout
+		grace_begins = up_ends - self.grace
+		return grace_begins < timezone.now() < up_ends
 
     def assign_all_channels(self):
         if self.user:
@@ -143,13 +153,13 @@ class Check(models.Model):
 
 
 class Ping(models.Model):
-    n = models.IntegerField(null=True)
-    owner = models.ForeignKey(Check)
-    created = models.DateTimeField(auto_now_add=True)
-    scheme = models.CharField(max_length=10, default="http")
-    remote_addr = models.GenericIPAddressField(blank=True, null=True)
-    method = models.CharField(max_length=10, blank=True)
-    ua = models.CharField(max_length=200, blank=True)
+	n = models.IntegerField(null=True)
+	owner = models.ForeignKey(Check)
+	created = models.DateTimeField(auto_now_add=True)
+	scheme = models.CharField(max_length=10, default="http")
+	remote_addr = models.GenericIPAddressField(blank=True, null=True)
+	method = models.CharField(max_length=10, blank=True)
+	ua = models.CharField(max_length=200, blank=True)
 
 
 class Channel(models.Model):
@@ -270,11 +280,11 @@ class Channel(models.Model):
 
 
 class Notification(models.Model):
-    class Meta:
-        get_latest_by = "created"
+	class Meta:
+		get_latest_by = "created"
 
-    owner = models.ForeignKey(Check)
-    check_status = models.CharField(max_length=6)
-    channel = models.ForeignKey(Channel)
-    created = models.DateTimeField(auto_now_add=True)
-    error = models.CharField(max_length=200, blank=True)
+	owner = models.ForeignKey(Check)
+	check_status = models.CharField(max_length=6)
+	channel = models.ForeignKey(Channel)
+	created = models.DateTimeField(auto_now_add=True)
+	error = models.CharField(max_length=200, blank=True)
