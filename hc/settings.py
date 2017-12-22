@@ -124,6 +124,7 @@ USE_L10N = True
 USE_TZ = True
 
 SITE_ROOT = "https://dev-gnext.herokuapp.com"
+#SITE_ROOT = "http://localhost:8000"
 
 PING_ENDPOINT = SITE_ROOT + "/ping/"
 PING_EMAIL_DOMAIN = HOST
@@ -144,7 +145,6 @@ DJMAIL_REAL_BACKEND = 'djmail.backends.async.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # your email
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')  # your email
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # your password
 
