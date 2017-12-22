@@ -1,5 +1,6 @@
 import uuid
 import re
+from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth import login as auth_login
@@ -8,9 +9,11 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.core import signing
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from hc.accounts.forms import (EmailPasswordForm, InviteTeamMemberForm,
                                RemoveTeamMemberForm, ReportSettingsForm,
                                SetPasswordForm, TeamNameForm)
@@ -96,6 +99,15 @@ def login_link_sent(request):
     return render(request, "accounts/login_link_sent.html")
 
 
+@login_required
+def reports(request):
+    if request.method == "GET":
+        ctx = {
+            "checks": request.user.check_set.order_by("created")
+            }
+        return render(request, "accounts/reports.html", ctx)
+
+
 def set_password_link_sent(request):
     return render(request, "accounts/set_password_link_sent.html")
 
@@ -145,6 +157,7 @@ def profile(request):
         profile.save()
 
     show_api_key = False
+    show_report_form = False
     if request.method == "POST":
         if "set_password" in request.POST:
             profile.send_set_password_link()
@@ -159,16 +172,23 @@ def profile(request):
             messages.info(request, "The API key has been revoked!")
         elif "show_api_key" in request.POST:
             show_api_key = True
+        # toggle between show edit report form and saved report settings
+        elif "edit_reports_settings" in request.POST:
+            show_report_form = True
         elif "update_reports_allowed" in request.POST:
             form = ReportSettingsForm(request.POST)
             if form.is_valid():
                 profile.reports_allowed = form.cleaned_data["reports_allowed"]
+                now = timezone.now()
+                days = form.cleaned_data["reports_duration"]
+                profile.next_report_date = now + timedelta(days=int(days))
+                profile.reports_duration = days
                 profile.save()
                 messages.success(request, "Your settings have been updated!")
+                show_report_form = False
         elif "invite_team_member" in request.POST:
             if not profile.team_access_allowed:
                 return HttpResponseForbidden()
-
             form = InviteTeamMemberForm(request.POST)
             if form.is_valid():
 
@@ -218,8 +238,9 @@ def profile(request):
     ctx = {
         "page": "profile",
         "badge_urls": badge_urls,
-        "profile": profile,
-        "show_api_key": show_api_key
+        "profile": request.user.profile,
+        "show_api_key": show_api_key,
+        "show_report_form": show_report_form
     }
 
     return render(request, "accounts/profile.html", ctx)

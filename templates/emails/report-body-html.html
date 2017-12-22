@@ -4,7 +4,11 @@
 {% block content %}
 
 <h1>Hello,</h1>
-<p>This is a monthly report sent by <a href="https://healthchecks.io">healthchecks.io</a>.</p>
+<p>This is a
+    {% if report_duration == 1 %} daily
+    {% elif report_duration == 7%} weekly
+    {% elif report_duration == 30 %} monthly
+    {% endif %} report sent by <a href="https://healthchecks.io">healthchecks.io</a>.</p>
 
 {% include "emails/summary-html.html" %}
 

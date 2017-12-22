@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+import datetime
 
 from hc.accounts.models import Member, Profile
 
@@ -33,6 +34,7 @@ class BaseTestCase(TestCase):
         # Charlie should have no access to Alice's stuff
         self.charlie = User(username="charlie", email="charlie@example.org")
         self.charlie.set_password("password")
+        self.charlie.date_joined = datetime.datetime(2017, 1, 11, 5, 34, 3)
         self.charlie.save()
 
         ### Set Charles not to have access to Alice's stuff

@@ -30,8 +30,7 @@
     .up { background: #5cb85c; }
     .grace { background: #f0ad4e; }
     .down { background: #d9534f; }
-    .fast { background: #d9ae1d; }
-    .early {background: #81c784; }
+
 
     .unnamed {
         color: #74787E;
@@ -62,14 +61,10 @@
                 <span class="badge new">PAUSED</span>
             {% elif check.in_grace_period %}
                 <span class="badge grace">LATE</span>
-            {% elif check.in_reverse_grace %}
-                <span class="badge early">EARLY</span>
             {% elif check.get_status == "up" %}
                 <span class="badge up">UP</span>
             {% elif check.get_status == "down" %}
                 <span class="badge down">DOWN</span>
-            {% elif check.get_status == "fast" %}
-                <span class="badge fast">FAST</span>
             {% endif %}
         </td>
         <td>
