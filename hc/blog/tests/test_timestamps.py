@@ -8,7 +8,7 @@ from django.test import TestCase
 from hc.blog.models import Category, Post
 
 
-class TestCategoryTimestampCase(TestCase):
+class TestTimestampsCase(TestCase):
     """
     Test timestamp and updated fields.
     """
