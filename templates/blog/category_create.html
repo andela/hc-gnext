@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <form method="post" class="blog-form">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Create Category"/>
+    </form>
+
+    <hr/>
+
+    <h3>Categories</h3>
+
+    <ul>
+        {% for category in categories %}
+            <li>{{ category.name }}</li>
+        {% empty %}
+            <li>Empty</li>
+        {% endfor %}
+    </ul>
+
+
+{% endblock content %}
