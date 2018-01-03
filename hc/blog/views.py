@@ -1,7 +1,11 @@
 from django.core.urlresolvers import reverse
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 from .forms import CategoryForm
 from .models import Category
+
+
+class BlogIndexView(TemplateView):
+    template_name = 'blog/blog_index.html'
 
 
 class CreateCategoryView(CreateView):
@@ -16,3 +20,4 @@ class CreateCategoryView(CreateView):
         categories = Category.objects.all()
         ctx['categories'] = categories
         return ctx
+
