@@ -46,6 +46,9 @@ class Category(Timestamp):
         :return: url
         """
 
+    def posts_in_category(self):
+        return self.posts.all()
+
     def __str__(self):
         return '%s' % self.name.capitalize()
 
@@ -65,7 +68,7 @@ class Post(Timestamp):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
-    category = models.ManyToManyField(Category, related_name='categories')
+    category = models.ManyToManyField(Category, related_name='posts')
     content = models.TextField()
 
     def get_absolute_url(self):
