@@ -23,7 +23,7 @@ class BlogPostTestCase(BaseTestCase):
         category.save()
         self.category = category
 
-        self.create_blog_post_link = reverse('hc-blog:create-post')
+        self.create_blog_post_link = reverse('hc-blog:post-create')
 
     def test_user_can_create_blog_post(self):
         """
@@ -45,6 +45,6 @@ class BlogPostTestCase(BaseTestCase):
 
         # assertions.
         self.assertEqual(response.status_code, 302)
-        self.assertGreater(posts, 0)
+        self.assertGreater(posts.count(), 0)
         self.assertIs(posts.first().title, post_title)
 
