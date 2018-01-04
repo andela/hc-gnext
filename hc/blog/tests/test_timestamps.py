@@ -32,7 +32,7 @@ class TestTimestampsCase(TestCase):
         post.save()
 
         # add category after thr post instance has been saved.
-        post.category.add(category)
+        post.categories.add(category)
 
         self.user = user
         self.category = category

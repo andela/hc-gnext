@@ -46,5 +46,5 @@ class BlogPostTestCase(BaseTestCase):
         # assertions.
         self.assertEqual(response.status_code, 302)
         self.assertGreater(posts.count(), 0)
-        self.assertIs(posts.first().title, post_title)
+        self.assertEqual(posts.first().title, post_title)
 
