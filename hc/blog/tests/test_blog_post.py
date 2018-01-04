@@ -56,12 +56,15 @@ class BlogPostTestCase(BaseTestCase):
         """
 
         self.client.post(self.create_blog_post_link, self.blog_post_form)
-        post = Post.objects.get(name=self.blog_post_form.get('title'))
-        blog_post_detail_url = reverse('hc-blog:blog-detail', kwargs={'slug': post.slug})
+        post = Post.objects.get(title=self.post_title)
+        blog_post_detail_url = reverse('hc-blog:post-detail', kwargs={'slug': post.slug})
 
         view_response = self.client.get(blog_post_detail_url)
 
-        view_context = view_response.context()
+        view_context = view_response.context
 
-        assert view_response.status_code == 200
-        self.assertIn(post, view_context)
+        # detail view contains object in the context which is an instance of Post model.
+        obj = [item.get('object') for item in view_context[0]][0]
+
+        self.assertEqual(view_response.status_code, 200)
+        self.assertEqual(post, obj)
