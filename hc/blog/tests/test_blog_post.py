@@ -114,3 +114,17 @@ class BlogPostTestCase(BaseTestCase):
         self.assertTrue(posts.count(), 1)
         self.assertEqual(posts.first().categories.count(), 2)
         self.assertTrue(posts.filter(title=new_title).exists())
+
+    def test_user_can_delete_post(self):
+        """
+
+        :return:
+        """
+        delete_form = dict(name=self.post.title)
+        delete_post_link = reverse('hc-blog:post-delete', kwargs={'slug': self.post.slug})
+        delete_response = self.client.post(delete_post_link, delete_form)
+
+        self.assertEqual(delete_response.status_code, 302)
+        self.assertRaises(self.post.DoesNotExist, Post.objects.get(title=self.post_title))
+
+
