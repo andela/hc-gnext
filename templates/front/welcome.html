@@ -55,33 +55,37 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
+        <br />
+        <h1>What is Healthchecks?</h1>
         <div class="row">
             <div class="col-md-4">
                 <div class="thumbnail">
                     <a href="http://127.0.0.1:8000/static/img/my_checks%402x.png">
-                    <img src="http://127.0.0.1:8000/static/img/my_checks%402x.png" alt="Lights" style="width:100%">
+                    <img src="{% static 'img/schedule.png' %}" alt="schedule tasks">
                     <div class="caption">
-                        <p>Integrations</p>
+                        <h3>Easy task scheduling</h3>
+                        <p>Create new checks and give them name for easy recognition later.
+                            Adjust Period and Grace time to match the periodicity and duration of your tasks.</p>
                     </div>
                     </a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="thumbnail">
-                    <a href="http://127.0.0.1:8000/static/img/my_checks%402x.png">
-                    <img src="http://127.0.0.1:8000/static/img/my_checks%402x.png" alt="Lights" style="width:100%">
+                    <img src="{% static 'img/alarm.png' %}" alt="receive alerts">
                     <div class="caption">
-                        <p>Integrations</p>
+                        <h3>Instant alerts</h3>
+                        <p>Receive instant alerts for whenver a task goes down or goes up when it has been down or runs too often.</p>
                     </div>
                     </a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="thumbnail">
-                    <a href="http://127.0.0.1:8000/static/img/my_checks%402x.png">
-                    <img src="http://127.0.0.1:8000/static/img/my_checks%402x.png" alt="Lights" style="width:100%">
+                    <img src="{% static 'img/report.png' %}" alt="receive reports">
                     <div class="caption">
-                        <p>Integrations</p>
+                        <h3>Easy periodic reports scheduling</h3>
+                        <p>Set periodic time after which to receive a summary of the status of all your scheduled tasks. The reports can be set to be received on a daily, weekly and monthly basis.</p>
                     </div>
                     </a>
                 </div>
@@ -90,37 +94,112 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="thumbnail">
-                    <a href="http://127.0.0.1:8000/static/img/my_checks%402x.png">
-                    <img src="http://127.0.0.1:8000/static/img/my_checks%402x.png" alt="Lights" style="width:100%">
+                    <img src="{% static 'img/intergrate.png' %}" alt="integrations">
                     <div class="caption">
-                        <p>Integrations</p>
+                        <h3>Wide range of Integrations</h3>
+                        <p>Add a number of ways to receive notifications for example SMS, Slack etc</p>
                     </div>
                     </a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="thumbnail">
-                    <a href="http://127.0.0.1:8000/static/img/my_checks%402x.png">
-                    <img src="http://127.0.0.1:8000/static/img/my_checks%402x.png" alt="Lights" style="width:100%">
+                    <img src="{% static 'img/team.png' %}" alt="teams">
                     <div class="caption">
-                        <p>Integrations</p>
-                    </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="thumbnail">
-                    <a href="http://127.0.0.1:8000/static/img/my_checks%402x.png">
-                    <img src="http://127.0.0.1:8000/static/img/my_checks%402x.png" alt="Lights" style="width:100%">
-                    <div class="caption">
-                        <p>Integrations</p>
+                        <h3>Easy Team Collaboration</h3>
+                        Add team members who can also monitor your tasks.
                     </div>
                     </a>
                 </div>
             </div>
         </div>
     <div class="row">
+    
+    <h1>Example of a crontab</h1>
+    <br />
+    <div class="row">
+        <div class="col-sm-6 col-sm-push-6">
+            <p id="pitch-text">Make a HTTP GET request to this address from your cron job, daemon, script or long running task.
+            <strong>When this address is not requested for a set time period, you will get alerted.</strong> Below are snippets that are ready to be copy/pasted into your own scripts.</p>
+        </div>
+            <div class="col-sm-6 col-sm-pull-6">
+                <h2 id="pitch-subtitle">Here's an unique ping address for you:</h2>
+                <div id="pitch-url">
+                    <input
+                        id="pitch-url-input"
+                        class="form-control"
+                        type="text"
+                        value="{{ ping_url }}"
+                        readonly />
+                </div>
+            </div>
+    </div>
 
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#crontab" data-toggle="tab">Crontab</a>
+                </li>
+                <li>
+                    <a href="#bash" data-toggle="tab">Bash</a>
+                </li>
+                <li>
+                    <a href="#python" data-toggle="tab">Python</a>
+                </li>
+                <li class="hidden-xs">
+                    <a href="#node" data-toggle="tab">Node.js</a>
+                </li>
+                <li class="hidden-xs">
+                    <a href="#php" data-toggle="tab">PHP</a>
+                </li>
+                <li class="hidden-xs">
+                    <a href="#browser" data-toggle="tab">Browser</a>
+                </li>
+                <li class="hidden-xs">
+                    <a href="#powershell" data-toggle="tab">PowerShell</a>
+                </li>
+                <li class="hidden-xs">
+                    <a href="#email" data-toggle="tab">Email</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="crontab">
+                    {% include "front/snippets/crontab.html" %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="bash">
+                    {% include "front/snippets/bash.html" %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="python">
+                    {% include "front/snippets/python.html" %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="node">
+                    {% include "front/snippets/node.html" %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="php">
+                    {% include "front/snippets/php.html" %}
+                </div>
+                <div class="tab-pane" id="browser">
+                    {% include "front/snippets/browser.html" %}
+                </div>
+                <div class="tab-pane" id="powershell">
+                    {% include "front/snippets/powershell.html" %}
+                </div>
+                <div class="tab-pane" id="email">
+                    <div class="instructions">
+                        As an alternative to HTTP/HTTPS requests,
+                        you can "ping" this check by sending an
+                        email message to
+                        <div class="email-address">
+                            <code>{{ check.email }}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <br />
     <div class="footer-jumbo-bleed">
     <div class="col-sm-12">
         <div class="jumbotron">
