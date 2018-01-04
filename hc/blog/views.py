@@ -16,7 +16,7 @@ class BlogIndexView(generic.TemplateView):
 
 class CreateCategoryView(generic.CreateView):
     form_class = CategoryForm
-    template_name = 'blog/create_category.html'
+    template_name = 'blog/post_form.html'
 
     def get_success_url(self):
         return reverse('hc-blog:category-create')
@@ -33,7 +33,7 @@ class CreateCategoryView(generic.CreateView):
 
 class CreateBlogPostView(generic.CreateView):
     form_class = PostForm
-    template_name = 'blog/create_category.html'
+    template_name = 'blog/post_form.html'
 
     def get_success_url(self):
         return reverse('hc-blog:index')
@@ -63,7 +63,7 @@ class UpdatePostView(generic.UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(UpdatePostView, self).get_form_kwargs()
-        if not 'request' in kwargs:
+        if 'request' not in kwargs:
             kwargs.update({'request': self.request})
 
         return kwargs
@@ -80,14 +80,13 @@ class DeletePostView(generic.DeleteView):
 
     def post(self, request, *args, **kwargs):
         post_data = request.POST
-        title = post_data.get('title', None)
-        if not title:
-            return HttpResponseRedirect(reverse('hc-blog:index'))
+        confirm = post_data.get('confirm', False)
 
-        if title != self.object.title:
-            HttpResponseRedirect(reverse('hc-blog:index'))
+        if confirm != 'on' or not confirm:
+            return HttpResponseRedirect(
+                reverse('hc-blog:post-detail', kwargs={'slug': kwargs.get('slug', '')}))
 
         return super(DeletePostView, self).post(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse('hc:blog:index')
+        return reverse('hc-blog:index')
