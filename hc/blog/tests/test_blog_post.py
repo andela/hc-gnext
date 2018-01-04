@@ -125,6 +125,7 @@ class BlogPostTestCase(BaseTestCase):
         delete_response = self.client.post(delete_post_link, delete_form)
 
         self.assertEqual(delete_response.status_code, 302)
-        self.assertRaises(self.post.DoesNotExist, Post.objects.get(title=self.post_title))
+        with self.assertRaises(self.post.DoesNotExist):
+            Post.objects.get(title=self.post_title)
 
 
