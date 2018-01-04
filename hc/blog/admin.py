@@ -24,7 +24,7 @@ class AdminPost(admin.ModelAdmin):
     """
 
     list_display = ('id', 'title', 'timestamp', 'updated')
-    list_filter = ('timestamp', 'category')
+    list_filter = ('timestamp', 'categories')
     search_fields = ('title', )
     prepopulated_fields = ({'slug': ('title', )})
 

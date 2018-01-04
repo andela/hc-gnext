@@ -68,7 +68,7 @@ class Post(Timestamp):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=50)
     slug = models.SlugField(unique=True)
-    category = models.ManyToManyField(Category, related_name='posts')
+    categories = models.ManyToManyField(Category, related_name='posts')
     content = models.TextField()
 
     def get_absolute_url(self):
