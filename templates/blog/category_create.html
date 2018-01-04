@@ -1,5 +1,4 @@
-{% extends 'base.html' %}
-
+{% extends 'blog/base.html' %}
 {% block content %}
 
    <style>
@@ -21,25 +20,29 @@
                 </form>
             </div>
 
-            <div class="col-md-6">
-                <h3 class="page-header">Choose Categories</h3>
+            <div class="ui form">
+                <div class="field">
+                    <h3 class="page-header">Choose Categories</h3>
+                    <select multiple="" class="ui dropdown">
+                        <form method="post">
+                            {% for cat in categories %}
+                                    <option value="{{ cat.id }}">{{ cat.name|capfirst }}</option>
+                            {% empty %}
+                                <p>Please create a new category</p>
+                            {% endfor %}
 
-                    <form method="post"   class="category-form">
-
-                        {% for cat in categories %}
-                            <div class="checkbox">
-                                <label>
-                                    <input class="checkbox" type="checkbox" value="{{ cat.id }}"/> {{ cat.name|capfirst }}
-                                </label>
-                            </div>
-
-                        {% empty %}
-                            <p>Please create a new category</p>
-                        {% endfor %}
-                        <input type="submit" value="Proceed">
-                    </form>
+                            <br>ENTER TITLE:<br>
+                            <br><input type="text" name="title"><br>
+                            <input type="submit" value="Proceed"/>
+                        </form>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
 
 {% endblock content %}
+
+  <script>
+    $('select.dropdown').dropdown();
+</script>
