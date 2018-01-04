@@ -93,12 +93,16 @@ class BlogPostTestCase(BaseTestCase):
         # new title
         new_title = 'new title'
 
-        update_post_link = reverse('hc-blog:post-edit', kwargs={'slug': self.post.slug})
+        update_post_link = reverse('hc-blog:post-update', kwargs={'slug': self.post.slug})
 
         # update title and add extra category
         update_form = dict(
             title=new_title,
-            categories=[new_category.id, ])
+            categories=[self.category.id, new_category.id, ],
+            content=self.post.content)
+
+        # assert category is 1 initially
+        self.assertEqual(Post.objects.count(), 1)
 
         update_response = self.client.post(update_post_link, update_form)
 
@@ -106,7 +110,7 @@ class BlogPostTestCase(BaseTestCase):
         posts = Post.objects.all()
 
         # assertions
-        self.assertTrue(update_response.status_code is 302)
-        self.assertGreater(posts.count(), 1)
-        self.assertEqual(posts.count(), 2)
+        self.assertEqual(update_response.status_code, 302)
+        self.assertTrue(posts.count(), 1)
+        self.assertEqual(posts.first().categories.count(), 2)
         self.assertTrue(posts.filter(title=new_title).exists())
