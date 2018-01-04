@@ -7,15 +7,15 @@
 
         <div class="col-md-12">
 
-            <h2 class="page-header text-center">{{ post.title|capfirst }}
-                <small class="pull-right">
-                    {% include 'blog/includes/buttons.html' %}
-                </small>
-            </h2>
+            <div class="ui piled segment">
+                <h4 class="ui header">
+                    <a href="{{ post.get_absolute_url }}">{{ post.title|capfirst }}</a>
+                    <small class="pull-right">
+                        {% include 'blog/includes/buttons.html' %}
+                    </small>
+                </h4>
 
-            <div class=" post-content">
                 <p class="text-justify">{{ post.content }}</p>
-                <br/>
             </div>
         </div>
 

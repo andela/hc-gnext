@@ -1,5 +1,6 @@
 {% extends 'blog/base.html' %}
 
+{% load staticfiles %}
 
 {% block blog_content %}
 
@@ -8,25 +9,29 @@
         <div class="col-md-6 col-sm-offset-3">
 
             {% if request.user.is_authenticated %}
-                <a href='{% url "hc-blog:category-create" %}'> create blog post</a>
+                <div class="text-center">
+                     <a class="btn btn-success" href='{% url "hc-blog:category-create" %}'><i class="plus icon"></i> create blog post</a>
+                </div>
             {% endif %}
 
-        <hr/>
+            <hr/>
 
-        {% for post in posts %}
-            <div class="list-group">
-                <div class="list-group-item well">
-                    <a href="{{ post.get_absolute_url }}">{{ post.title|capfirst }}</a>
-                </div>
-            </div>
-        {% empty %}
+                {% for post in posts %}
+                    <div class="ui piled segment">
+                        <h4 class="ui header">
+                            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                            <small class="pull-right">{{ post.timestamp|timesince }} ago </small>
+                        </h4>
 
-            <h4 class="text-center">No Posts!!</h4>
+                    <p>{{ post.content|truncatechars:200 }}</p>
+                    </div>
+                {% empty %}
 
-        {% endfor %}
+                    <h4 class="text-center">No Posts!!</h4>
 
+                {% endfor %}
         </div>
-
+    </div>
     </div>
 
 {% endblock %}
