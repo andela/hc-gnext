@@ -10,6 +10,20 @@
     <link rel="stylesheet" href="{% static 'css/icon.min.css' %}" type="text/css"/>
     {% endcompress css %}
 
+    {% if messages %}
+    <div class="col-sm-12">
+        {% for message in messages %}
+            <p class="alert alert-{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            <a href="{{ previous_url }}"><i class="arrow left icon"></i> back</a>
+        </div>
+    </div>
+
     {% block blog_content %}{% endblock blog_content %}
 
     {% compress js %}
