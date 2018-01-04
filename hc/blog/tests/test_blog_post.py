@@ -23,6 +23,16 @@ class BlogPostTestCase(BaseTestCase):
         category.save()
         self.category = category
 
+        # create post object.
+        post = Post()
+        post.title = 'test post'
+        post.slug = 'test-post'
+        post.content = 'test post content'
+        post.created_by = self.alice
+        post.save()
+        post.categories.add(category)
+        self.post = post
+
         # blog post form.
         self.post_title = 'test title'
         self.blog_post_form = dict(
@@ -68,3 +78,35 @@ class BlogPostTestCase(BaseTestCase):
 
         self.assertEqual(view_response.status_code, 200)
         self.assertEqual(post, obj)
+
+    def test_user_can_update_blog_post(self):
+        """
+        A user should be able to update created blog posts.
+        """
+
+        # new category
+        new_category = Category()
+        new_category.name = 'new category'
+        new_category.slug = 'new-category'
+        new_category.save()
+
+        # new title
+        new_title = 'new title'
+
+        update_post_link = reverse('hc-blog:post-edit', kwargs={'slug': self.post.slug})
+
+        # update title and add extra category
+        update_form = dict(
+            title=new_title,
+            categories=[new_category.id, ])
+
+        update_response = self.client.post(update_post_link, update_form)
+
+        # query posts
+        posts = Post.objects.all()
+
+        # assertions
+        self.assertTrue(update_response.status_code is 302)
+        self.assertGreater(posts.count(), 1)
+        self.assertEqual(posts.count(), 2)
+        self.assertTrue(posts.filter(title=new_title).exists())

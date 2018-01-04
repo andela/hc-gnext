@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-
-
-{% block content %}
-
-    {% if request.user.is_authenticated %}
-        <a href='{% url "hc-blog:category-create" %}'> create blog post</a>
-    {% endif %}
-{% endblock %}
