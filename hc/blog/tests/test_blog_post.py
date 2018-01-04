@@ -47,4 +47,5 @@ class BlogPostTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertGreater(posts.count(), 0)
         self.assertEqual(posts.first().title, post_title)
-
+        self.assertEqual(posts.first().categories.count(), 1)
+        assert posts.first().categories.first() == self.category

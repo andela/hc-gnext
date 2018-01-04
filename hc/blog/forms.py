@@ -42,8 +42,10 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ('title', 'categories', 'content')
 
-
     def __init__(self, *args, **kwargs):
+        if 'request' in kwargs:
+            self.request = kwargs.pop('request')
+
         super(PostForm, self).__init__(*args, **kwargs)
 
         place_holders = {
@@ -58,3 +60,12 @@ class PostForm(forms.ModelForm):
             else:
                 field_obj.widget.attrs.update({'class': 'form-control'})
                 field_obj.widget.attrs.update({'placeholder': place_holders.get(field_name, '')})
+
+    def save(self, commit=True):
+        obj = super(PostForm, self).save(commit=False)
+        obj.slug = slugify(self.cleaned_data.get('title', ''))
+        obj.created_by = self.request.user
+        obj.save()
+        obj.categories = self.cleaned_data.get('categories', '')
+        obj.save()
+        return obj

@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, TemplateView
 from .forms import CategoryForm, PostForm
 from .models import Category
@@ -23,3 +24,21 @@ class CreateCategoryView(CreateView):
         ctx['post_form'] = post_form
         return ctx
 
+
+class CreateBlogPostView(CreateView):
+    form_class = PostForm
+    template_name = 'blog/category_create.html'
+
+    def get_success_url(self):
+        return reverse('hc-blog:index')
+
+    def get(self, request, *args, **kwargs):
+        super(CreateBlogPostView, self).get(request, *args, **kwargs)
+        return HttpResponseRedirect(reverse('hc-blog:category-create'))
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateBlogPostView, self).get_form_kwargs()
+        if not hasattr(kwargs, 'request'):
+            kwargs.update({'request': self.request})
+
+        return kwargs
