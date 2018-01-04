@@ -24,6 +24,7 @@ class BlogPostTestCase(BaseTestCase):
         self.category = category
 
         # create post object.
+        self.post_title = 'test title'
         post = Post()
         post.title = 'test post'
         post.slug = 'test-post'
@@ -34,7 +35,6 @@ class BlogPostTestCase(BaseTestCase):
         self.post = post
 
         # blog post form.
-        self.post_title = 'test title'
         self.blog_post_form = dict(
             categories=[self.category.id, ],
             title=self.post_title,
@@ -120,12 +120,12 @@ class BlogPostTestCase(BaseTestCase):
 
         :return:
         """
-        delete_form = dict(name=self.post.title)
+        delete_form = dict(confirm='on')
         delete_post_link = reverse('hc-blog:post-delete', kwargs={'slug': self.post.slug})
         delete_response = self.client.post(delete_post_link, delete_form)
 
         self.assertEqual(delete_response.status_code, 302)
         with self.assertRaises(self.post.DoesNotExist):
-            Post.objects.get(title=self.post_title)
+            Post.objects.get(title=self.post.title)
 
 
