@@ -1,0 +1,7 @@
+{% if request.user.is_authenticated %}
+    {% if post.created_by == request.user %}
+        <a href="{{ post.get_update_url  }}" class=""><i class="write icon"></i></a>
+
+        <a href="{{ post.get_delete_url  }}" class="danger"><i class="trash icon"></i></a>
+    {% endif %}
+{% endif %}

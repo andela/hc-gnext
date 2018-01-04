@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^post/create$', views.CreateBlogPostView.as_view(), name='post-create'),
     url(r'^post/(?P<slug>[a-zA-Z-]+)$', views.RetrievePostDetailView.as_view(), name='post-detail'),
     url(r'^post/(?P<slug>[a-zA-Z-]+)/edit/$', views.UpdatePostView.as_view(), name='post-update'),
+    url(r'^post/(?P<slug>[a-zA-Z-]+)/delete/$', views.DeletePostView.as_view(), name='post-delete'),
 ]

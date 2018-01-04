@@ -3,8 +3,8 @@ This module implements blog model classes.
 """
 
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils import timezone
 
 
 class Timestamp(models.Model):
@@ -73,10 +73,30 @@ class Post(Timestamp):
 
     def get_absolute_url(self):
         """
-        Generates url link for each post.
+        Generates link for each post.
 
         :return: url
         """
+
+        return reverse('hc-blog:post-detail', kwargs={'slug': self.slug})
+
+    def get_update_url(self):
+        """
+        Generates update link for each post.
+
+        :return: url
+        """
+
+        return reverse('hc-blog:post-update', kwargs={'slug': self.slug})
+
+    def get_delete_url(self):
+        """
+        Generates delete link for each post.
+
+        :return: url
+        """
+
+        return reverse('hc-blog:post-delete', kwargs={'slug': self.slug})
 
     def __str__(self):
         return '%s' % self.title.capitalize()

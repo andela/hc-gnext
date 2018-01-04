@@ -1,11 +1,11 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
+from django.views import generic
 from .forms import CategoryForm, PostForm
 from .models import Category, Post
 
 
-class BlogIndexView(TemplateView):
+class BlogIndexView(generic.TemplateView):
     template_name = 'blog/index.html'
 
     def get_context_data(self, **kwargs):
@@ -14,9 +14,9 @@ class BlogIndexView(TemplateView):
         return ctx
 
 
-class CreateCategoryView(CreateView):
+class CreateCategoryView(generic.CreateView):
     form_class = CategoryForm
-    template_name = 'blog/category_create.html'
+    template_name = 'blog/create_category.html'
 
     def get_success_url(self):
         return reverse('hc-blog:category-create')
@@ -31,9 +31,9 @@ class CreateCategoryView(CreateView):
         return ctx
 
 
-class CreateBlogPostView(CreateView):
+class CreateBlogPostView(generic.CreateView):
     form_class = PostForm
-    template_name = 'blog/category_create.html'
+    template_name = 'blog/create_category.html'
 
     def get_success_url(self):
         return reverse('hc-blog:index')
@@ -44,39 +44,50 @@ class CreateBlogPostView(CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(CreateBlogPostView, self).get_form_kwargs()
-        if not hasattr(kwargs, 'request'):
+        if not 'request' in kwargs:
             kwargs.update({'request': self.request})
 
         return kwargs
 
 
-class RetrievePostDetailView(DetailView):
-    template_name = 'blog/post_detail.html'
+class RetrievePostDetailView(generic.DetailView):
     model = Post
 
 
-class UpdatePostView(UpdateView):
+class UpdatePostView(generic.UpdateView):
     model = Post
     form_class = PostForm
-    template_name = 'blog/category_create.html'
 
     def get_success_url(self):
         return reverse('hc-blog:post-detail', kwargs={'slug': self.object.slug})
 
     def get_form_kwargs(self):
         kwargs = super(UpdatePostView, self).get_form_kwargs()
-        if not hasattr(kwargs, 'request'):
+        if not 'request' in kwargs:
             kwargs.update({'request': self.request})
 
         return kwargs
 
-    def form_invalid(self, form):
-        print(form)
-        return super(UpdatePostView, self).form_valid(form)
-
     def get_context_data(self, **kwargs):
         ctx = super(UpdatePostView, self).get_context_data(**kwargs)
         ctx['page_action'] = 'update'
-        post_form = ctx.get('form', )
-        ctx.update({'post_form': post_form})
+        ctx['category_form'] = CategoryForm()
         return ctx
+
+
+class DeletePostView(generic.DeleteView):
+    model = Post
+
+    def post(self, request, *args, **kwargs):
+        post_data = request.POST
+        title = post_data.get('title', None)
+        if not title:
+            return HttpResponseRedirect(reverse('hc-blog:index'))
+
+        if title != self.object.title:
+            HttpResponseRedirect(reverse('hc-blog:index'))
+
+        return super(DeletePostView, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('hc:blog:index')
