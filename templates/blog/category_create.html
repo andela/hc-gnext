@@ -26,31 +26,12 @@
             <div class="col-md-6">
                 <h3 class="page-header">Post Blog</h3>
 
-                <form method="post" action="{% url 'hc-blog:post-create' %}" class="">
+                {% if page_action == 'create' %}
+                    {% include 'blog/includes/post_create_form.html' %}
+                {% elif page_action == 'update' %}
+                    {% include 'blog/includes/post_update_form.html' %}
+                {% endif %}
 
-                    {% csrf_token %}
-
-                    <div class="form-group">
-                        <label for="id_title">Title</label>
-                        {{ post_form.title }}
-                    </div>
-
-                    <div class="form-group">
-                        <label for="id_categories">Categories</label>
-                        <div class="ui form">
-                            <div class="field">
-                                {{ post_form.categories }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="id_content">Content</label>
-                        {{ post_form.content }}
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Publish</button>
-                </form>
             </div>
 
         </div>
