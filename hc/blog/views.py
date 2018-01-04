@@ -5,16 +5,34 @@ from .forms import CategoryForm, PostForm
 from .models import Category, Post
 
 
-class BlogIndexView(generic.TemplateView):
+class CommonContentMixin(object):
+    def get_context_data(self, **kwargs):
+        ctx = super(CommonContentMixin, self).get_context_data(**kwargs)
+        previous_url = self.request.META.get('HTTP_REFERER', None)
+        if previous_url:
+            ctx['previous_url'] = previous_url
+        return ctx
+
+
+class BlogIndexView(CommonContentMixin, generic.TemplateView):
     template_name = 'blog/index.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(BlogIndexView, self).get_context_data(**kwargs)
-        ctx['posts'] = Post.objects.all()
+        category_slug = self.request.GET.get('category', None)
+        posts = Post.objects.all()
+
+        # filter posts by category
+        if category_slug:
+            posts = Post.objects.filter(categories__slug__contains=category_slug)
+
+        ctx['categories'] = Category.objects.all()
+        ctx['posts'] = posts
+
         return ctx
 
 
-class CreateCategoryView(generic.CreateView):
+class CreateCategoryView(CommonContentMixin, generic.CreateView):
     form_class = CategoryForm
     template_name = 'blog/post_form.html'
 
@@ -31,7 +49,7 @@ class CreateCategoryView(generic.CreateView):
         return ctx
 
 
-class CreateBlogPostView(generic.CreateView):
+class CreateBlogPostView(CommonContentMixin, generic.CreateView):
     form_class = PostForm
     template_name = 'blog/post_form.html'
 
@@ -50,7 +68,7 @@ class CreateBlogPostView(generic.CreateView):
         return kwargs
 
 
-class RetrievePostDetailView(generic.DetailView):
+class RetrievePostDetailView(CommonContentMixin, generic.DetailView):
     model = Post
 
 
@@ -75,7 +93,7 @@ class UpdatePostView(generic.UpdateView):
         return ctx
 
 
-class DeletePostView(generic.DeleteView):
+class DeletePostView(CommonContentMixin, generic.DeleteView):
     model = Post
 
     def post(self, request, *args, **kwargs):

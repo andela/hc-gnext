@@ -45,6 +45,8 @@ class Category(Timestamp):
 
         :return: url
         """
+        param = '?category=%s' % self.slug
+        return reverse('hc-blog:index') + param
 
     def posts_in_category(self):
         return self.posts.all()
