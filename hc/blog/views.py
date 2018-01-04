@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 from .forms import CategoryForm, PostForm
 from .models import Category, Post
-from .mixins import CommonContentMixin
+from .mixins import CommonContentMixin, PostOwnerRequiredMixin
 
 from braces.views import UserPassesTestMixin, LoginRequiredMixin
 
@@ -75,20 +75,11 @@ class RetrievePostDetailView(LoginRequiredMixin, CommonContentMixin, generic.Det
 
 class UpdatePostView(
     LoginRequiredMixin,
-    UserPassesTestMixin,
+    PostOwnerRequiredMixin,
     CommonContentMixin,
     generic.UpdateView):
     model = Post
     form_class = PostForm
-
-    def test_func(self, user):
-        slug = self.kwargs.get('slug', None)
-        if slug:
-            obj = Post.objects.filter(slug=slug)
-            if obj.exists():
-                owner = obj.first().created_by == user
-                return owner if True else messages.warning(self.request, 'You are not the owner of the blog post!')
-        return False
 
     def get_success_url(self):
         return reverse('hc-blog:post-detail', kwargs={'slug': self.object.slug})
@@ -107,17 +98,8 @@ class UpdatePostView(
         return ctx
 
 
-class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, CommonContentMixin, generic.DeleteView):
+class DeletePostView(LoginRequiredMixin, PostOwnerRequiredMixin, CommonContentMixin, generic.DeleteView):
     model = Post
-
-    def test_func(self, user):
-        slug = self.kwargs.get('slug', None)
-        if slug:
-            obj = Post.objects.filter(slug=slug)
-            if obj.exists():
-                owner = obj.first().created_by == user
-                return owner if True else messages.warning(self.request, 'You are not the owner of the blog post!')
-        return False
 
     def post(self, request, *args, **kwargs):
         post_data = request.POST
@@ -130,5 +112,5 @@ class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, CommonContentMixin
         return super(DeletePostView, self).post(request, *args, **kwargs)
 
     def get_success_url(self):
-        messages.success(self.request, 'Blog post succesfully deleted')
+        messages.success(self.request, 'Blog post successfully deleted')
         return reverse('hc-blog:index')
