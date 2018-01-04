@@ -1,12 +1,17 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, DetailView, TemplateView
 from .forms import CategoryForm, PostForm
-from .models import Category
+from .models import Category, Post
 
 
 class BlogIndexView(TemplateView):
     template_name = 'blog/blog_index.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BlogIndexView, self).get_context_data(**kwargs)
+        ctx['posts'] = Post.objects.all()
+        return ctx
 
 
 class CreateCategoryView(CreateView):
@@ -42,3 +47,8 @@ class CreateBlogPostView(CreateView):
             kwargs.update({'request': self.request})
 
         return kwargs
+
+
+class RetrievePostDetailView(DetailView):
+    template_name = 'blog/post_detail.html'
+    model = Post
