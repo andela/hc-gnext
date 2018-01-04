@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load compress staticfiles %}
+{% block content %}
+
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'css/icon.min.css' %}" type="text/css"/>
+    {% endcompress css %}
+
+    {% block blog_content %}{% endblock blog_content %}
+
+    {% compress js %}
+    <script
+            src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous">
+    </script>
+    <script src="{% static 'js/semantic.min.js' %}"></script>
+    <script src="{% static 'js/blog.js' %}"></script>
+
+    {% endcompress js %}
+
+{% endblock content %}
+
+{% block scripts %}
+{% endblock %}
+
+
