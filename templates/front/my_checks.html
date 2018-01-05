@@ -102,16 +102,18 @@
                         </div>
 
                         <div class="form-group">
-                                <label for="update-tags-input" class="col-sm-2 control-label">
+                                <label class="col-sm-2 control-label" for="update_priority">
                                         Priority
                                     </label>
                             <div class="col-sm-9">
                                 <input
-                                    id="update-tags-priority"
-                                    name="priority"
+                                    id="update_priority"
+                                    name="prior"
                                     type="checkbox"
-                                    class="form-check-input" />
-                                <label class="form-check-label" for="priority">High</label>
+                                    class="form-check-input" 
+                                    {% if check.is_high_priority %} checked {% endif %}>
+                                <label class="form-check-label" >High</label>
+                                
                                 <span class="help-block">
                                     Assign Priority for important jobs that must stay in an up and active status.
                                 </span>
@@ -119,13 +121,13 @@
                         </div>
 
                         <div class="form-group">
-                                <label for="update-tags-input" class="col-sm-2 control-label">
+                                <label for="update_email" class="col-sm-2 control-label">
                                     Users
                                 </label>
                                 <div class="col-sm-9">
                                     <input
-                                        id="update-tags-input"
-                                        name="user_email"
+                                        id="update_email"
+                                        name="email"
                                         type="text"
                                         value=""
                                         placeholder="Persons in Chagre"

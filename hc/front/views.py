@@ -146,6 +146,8 @@ def update_name(request, code):
     if form.is_valid():
         check.name = form.cleaned_data["name"]
         check.tags = form.cleaned_data["tags"]
+        check.is_high_priority = form.cleaned_data["prior"]
+        check.user_emails = form.cleaned_data["email"]
         check.save()
 
     return redirect("hc-checks")

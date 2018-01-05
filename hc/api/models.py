@@ -62,6 +62,8 @@ class Check(models.Model):
     interval = models.DurationField(default=DEFAULT_NAG)
     nag_status = models.BooleanField(default=True)
     nag_after = models.DateTimeField(null=True)
+    is_high_priority = models.BooleanField(default=False)
+    user_emails = models.CharField(max_length=700, blank=True)
 
     def name_then_code(self):
         if self.name:
@@ -126,6 +128,9 @@ class Check(models.Model):
 
     def tags_list(self):
         return [t.strip() for t in self.tags.split(" ") if t.strip()]
+
+    def emails_list(self):
+        return [e.strip() for e in self.emails.split(" ") if e.strip()]    
 
     def to_dict(self):
         pause_rel_url = reverse("hc-api-pause", args=[self.code])
