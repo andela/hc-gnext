@@ -74,20 +74,6 @@ class PostForm(forms.ModelForm):
                 field_obj.widget.attrs.update({'class': 'form-control'})
                 field_obj.widget.attrs.update({'placeholder': place_holders.get(field_name, '')})
 
-    def clean_title(self):
-        """
-        Check if post with the same title exists to avoid duplication.
-        """
-
-        title = self.cleaned_data.get('title', '')
-        exists = Post.objects.filter(title=title)
-        if exists:
-            msg = 'There exists a post with that title, choose a different title'
-            messages.warning(self.request, msg)
-            raise forms.ValidationError(msg)
-
-        return title
-
     def save(self, commit=True):
         obj = super(PostForm, self).save(commit=False)
         obj.slug = slugify(self.cleaned_data.get('title', ''))
