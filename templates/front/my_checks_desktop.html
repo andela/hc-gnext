@@ -37,6 +37,7 @@
         <td class="name-cell">
             <div data-name="{{ check.name }}"
                     data-tags="{{ check.tags }}"
+                    data-email="{{check.user_emails}}"
                     data-url="{% url 'hc-update-name' check.code %}"
                     data-priority="{{ check.is_high_priority }}"
                     class="my-checks-name {% if not check.name %}unnamed{% endif %}">

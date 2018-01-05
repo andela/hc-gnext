@@ -145,7 +145,8 @@ class Check(models.Model):
             "interval": int(self.interval.total_seconds()),
             "n_pings": self.n_pings,
             "status": self.get_status(),
-            "is_high_priority": self.is_high_priority
+            "is_high_priority": self.is_high_priority,
+            "user_emails": self.emails
 
         }
 
