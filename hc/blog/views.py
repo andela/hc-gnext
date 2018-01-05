@@ -15,7 +15,7 @@ from .models import Category, Post
 from .mixins import CommonContentMixin, PostOwnerRequiredMixin
 
 
-class BlogIndexView(LoginRequiredMixin, CommonContentMixin, generic.TemplateView):
+class BlogIndexView(CommonContentMixin, generic.TemplateView):
     template_name = 'blog/index.html'
     title = 'Blog Index'
 
