@@ -14,32 +14,34 @@ from hc.api import transports
 from hc.lib import emails
 
 STATUSES = (
-	("up", "Up"),
-	("down", "Down"),
-	("new", "New"),
-	("paused", "Paused"),
-	("fast", "Fast")
+    ("up", "Up"),
+    ("down", "Down"),
+    ("new", "New"),
+    ("paused", "Paused"),
+    ("fast", "Fast")
 )
 
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
 DEFAULT_NAG = td(hours=1)
 
-CHANNEL_KINDS = (("email", "Email"),
-                 ("aft", "AfricasTalking"),
-                 ("webhook", "Webhook"),
-                 ("hipchat", "HipChat"),
-                 ("slack", "Slack"),
-                 ("pd", "PagerDuty"),
-                 ("po", "Pushover"),
-                 ("victorops", "VictorOps"))
+CHANNEL_KINDS = (
+    ("email", "Email"),
+    ("aft", "AfricasTalking"),
+    ("webhook", "Webhook"),
+    ("hipchat", "HipChat"),
+    ("slack", "Slack"),
+    ("pd", "PagerDuty"),
+    ("po", "Pushover"),
+    ("victorops", "VictorOps")
+)
 
 PO_PRIORITIES = {
-	-2: "lowest",
-	-1: "low",
-	0: "normal",
-	1: "high",
-	2: "emergency"
+    -2: "lowest",
+    -1: "low",
+    0: "normal",
+    1: "high",
+    2: "emergency"
 }
 
 
@@ -98,8 +100,8 @@ class Check(models.Model):
 
         now = timezone.now()
         if self.last_ping + self.timeout - self.grace > now:
-			      return "fast"
-          
+            return "fast"
+
         if self.last_ping + self.timeout + self.grace > now:
             return "up"
 
@@ -112,7 +114,7 @@ class Check(models.Model):
         up_ends = self.last_ping + self.timeout
         grace_ends = up_ends + self.grace
         return up_ends < timezone.now() < grace_ends
-     
+
     def in_reverse_grace(self):
         if self.status in ("new", "paused"):
             return False
@@ -130,7 +132,7 @@ class Check(models.Model):
         return [t.strip() for t in self.tags.split(" ") if t.strip()]
 
     def emails_list(self):
-        return [e.strip() for e in self.emails.split(" ") if e.strip()]    
+        return [e.strip() for e in self.emails.split(" ") if e.strip()]
 
     def to_dict(self):
         pause_rel_url = reverse("hc-api-pause", args=[self.code])
@@ -161,13 +163,13 @@ class Check(models.Model):
 
 
 class Ping(models.Model):
-	n = models.IntegerField(null=True)
-	owner = models.ForeignKey(Check)
-	created = models.DateTimeField(auto_now_add=True)
-	scheme = models.CharField(max_length=10, default="http")
-	remote_addr = models.GenericIPAddressField(blank=True, null=True)
-	method = models.CharField(max_length=10, blank=True)
-	ua = models.CharField(max_length=200, blank=True)
+    n = models.IntegerField(null=True)
+    owner = models.ForeignKey(Check)
+    created = models.DateTimeField(auto_now_add=True)
+    scheme = models.CharField(max_length=10, default="http")
+    remote_addr = models.GenericIPAddressField(blank=True, null=True)
+    method = models.CharField(max_length=10, blank=True)
+    ua = models.CharField(max_length=200, blank=True)
 
 
 class Channel(models.Model):
@@ -288,11 +290,11 @@ class Channel(models.Model):
 
 
 class Notification(models.Model):
-	class Meta:
-		get_latest_by = "created"
+    class Meta:
+        get_latest_by = "created"
 
-	owner = models.ForeignKey(Check)
-	check_status = models.CharField(max_length=6)
-	channel = models.ForeignKey(Channel)
-	created = models.DateTimeField(auto_now_add=True)
-	error = models.CharField(max_length=200, blank=True)
+    owner = models.ForeignKey(Check)
+    check_status = models.CharField(max_length=6)
+    channel = models.ForeignKey(Channel)
+    created = models.DateTimeField(auto_now_add=True)
+    error = models.CharField(max_length=200, blank=True)
