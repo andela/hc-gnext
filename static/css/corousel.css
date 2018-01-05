@@ -1,0 +1,18 @@
+div.carousel-caption{
+    right: 20;
+    left: 20%;
+    padding-bottom: unset;
+    padding-top: unset;
+    background: #b9b081a8;
+    border-radius: 5px;
+    bottom: 50px;
+    text-shadow: unset;
+    
+}
+font{
+    color: #08311b;
+}
+
+.thumbnail{
+    height: 355px;
+}
