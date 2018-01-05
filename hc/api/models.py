@@ -144,7 +144,9 @@ class Check(models.Model):
             "grace": int(self.grace.total_seconds()),
             "interval": int(self.interval.total_seconds()),
             "n_pings": self.n_pings,
-            "status": self.get_status()
+            "status": self.get_status(),
+            "is_high_priority": self.is_high_priority
+
         }
 
         if self.last_ping:

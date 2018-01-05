@@ -125,11 +125,12 @@ $(function () {
 
     $(".my-checks-name").click(function () {
         var $this = $(this);
-
+        var checked = $this.data("priority") == "True"? true : false;
+        
+        $("#update_priority").attr("checked", checked);
         $("#update-name-form").attr("action", $this.data("url"));
         $("#update-name-input").val($this.data("name"));
         $("#update-tags-input").val($this.data("tags"));
-        $("#update_priority").val($this.data("prior"));
         $("#update_email").val($this.data("email"));
         $('#update-name-modal').modal("show");
         $("#update-name-input").focus();
