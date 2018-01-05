@@ -45,6 +45,11 @@
                 {% for tag in check.tags_list %}
                 <span class="label label-tag">{{ tag }}</span>
                 {% endfor %}
+                {% if check.is_high_priority%}
+                <span class="label label-danger">High</span>
+                {% else %}
+                <span class="label label-primary">Normal</span>
+                {% endif %}
             </div>
         </td>
         <td class="url-cell">
