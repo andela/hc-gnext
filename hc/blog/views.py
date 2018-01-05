@@ -81,7 +81,7 @@ class BlogPostCreateView(LoginRequiredMixin, CommonContentMixin, generic.CreateV
         return kwargs
 
 
-class BlogPostDetailView(LoginRequiredMixin, CommonContentMixin, generic.DetailView):
+class BlogPostDetailView(CommonContentMixin, generic.DetailView):
     model = Post
     title = 'Post'
 
