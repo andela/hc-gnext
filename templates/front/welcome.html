@@ -5,129 +5,123 @@
 <div class="index-bleed">
 <div class="container">
     <div class="row">
-    <div class="col-sm-12">
-        <h1 id="pitch">Cron Monitoring. Get Notified When Your Cron Jobs Fail.</h1>
-    </div>
-    </div>
-
-    <div class="row">
-    <div class="col-sm-6 col-sm-push-6">
-        <p id="pitch-text">Make a HTTP GET request to this address from your cron job, daemon, script or long running task.
-        <strong>When this address is not requested for a set time period, you will get alerted.</strong> Below are snippets that are ready to be copy/pasted into your own scripts.</p>
-    </div>
-    <div class="col-sm-6 col-sm-pull-6">
-        <h2 id="pitch-subtitle">Here's an unique ping address for you:</h2>
-        <div id="pitch-url">
-            <input
-                id="pitch-url-input"
-                class="form-control"
-                type="text"
-                value="{{ ping_url }}"
-                readonly />
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+        
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img src="{% static 'img/new.png'%}" alt="Schedule">
+                    <div class="carousel-caption">
+                        <font color="green">
+                            <h3>Create scheduled tasks from a GUI</h3>
+                            <p>A list of your checks, one for each Cron job, daemon or periodically running task you want to monitor.</br>
+                                Give names to your checks to easily recognize them later. Adjust Period and Grace time to match periodicity and duration of your tasks.
+                            </p>
+                        </font>
+                    </div>
+                </div>
+        
+                <div class="item">
+                <img src="{% static 'img/notify.png'%}" alt="Configure">
+                <div class="carousel-caption">
+                    <font color="ForestGreen ">
+                        <h3>Instant alerts</h3>
+                        <p>Now you can integrate with popular messaging platforms including slack,email and so many others</p>
+                    </font>
+                </div>
+                </div>
+            
+                <div class="item">
+                    <img src="{% static 'img/collaborate.png'%}" alt="Integrate">
+                    <div class="carousel-caption">
+                        <font color="green">
+                            <h3>Easy Team Collaboration</h3>
+                            <p>Add team members who can also monitor your tasks.</p>
+                        </font>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
-    </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-sm-12">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active">
-                    <a href="#crontab" data-toggle="tab">Crontab</a>
-                </li>
-                <li>
-                    <a href="#bash" data-toggle="tab">Bash</a>
-                </li>
-                <li>
-                    <a href="#python" data-toggle="tab">Python</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#node" data-toggle="tab">Node.js</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#php" data-toggle="tab">PHP</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#browser" data-toggle="tab">Browser</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#powershell" data-toggle="tab">PowerShell</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#email" data-toggle="tab">Email</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="crontab">
-                    {% include "front/snippets/crontab.html" %}
+        <br />
+        <h2 class="tour-title">What is Healthchecks?</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="thumbnail">
+                    <img src="{% static 'img/meeting.png' %}" alt="schedule tasks" width="50%">
+                    <div class="caption">
+                        <h3>Easy Cron monitoring</h3>
+                        <p>Monitor all your cron jobs, daemons, scripts or long running tasks easily and from multiple platforms. </p>
+                    </div>
+                    </a>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="bash">
-                    {% include "front/snippets/bash.html" %}
+            </div>
+            <div class="col-md-4">
+                <div class="thumbnail">
+                    <img src="{% static 'img/schedule.png' %}" alt="schedule tasks" width="50%">
+                    <div class="caption">
+                        <h3>Easy task scheduling</h3>
+                        <p>Create new checks and give them name for easy recognition later.
+                            Adjust Period and Grace time to match the periodicity and duration of your tasks.</p>
+                    </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="python">
-                    {% include "front/snippets/python.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="node">
-                    {% include "front/snippets/node.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="php">
-                    {% include "front/snippets/php.html" %}
-                </div>
-                <div class="tab-pane" id="browser">
-                    {% include "front/snippets/browser.html" %}
-                </div>
-                <div class="tab-pane" id="powershell">
-                    {% include "front/snippets/powershell.html" %}
-                </div>
-                <div class="tab-pane" id="email">
-                    <div class="instructions">
-                        As an alternative to HTTP/HTTPS requests,
-                        you can "ping" this check by sending an
-                        email message to
-                        <div class="email-address">
-                            <code>{{ check.email }}</code>
-                        </div>
+            </div>
+            <div class="col-md-4">
+                <div class="thumbnail">
+                    <img src="{% static 'img/alarm.png' %}" alt="receive alerts" width="50%">
+                    <div class="caption">
+                        <h3>Instant alerts</h3>
+                        <p>Receive instant alerts for whenver a task goes down or goes up when it has been down or runs too often.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-</div>
-
-<div class="get-started-bleed">
-<div class="container">
-    <div class="row">
-        <div id="get-started" class="col-sm-6 col-sm-offset-3">
-            <h2>E-mail Address to Receive Alerts:</h2>
-            <form action="{% url 'hc-login' %}" method="post">
-                {% csrf_token %}
-
-                <div class="form-group">
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-addon">@</div>
-                        <input
-                            type="email"
-                            class="form-control"
-                            name="email"
-                            autocomplete="email"
-                            placeholder="Email">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="thumbnail">
+                    <img src="{% static 'img/report.png' %}" alt="receive reports" width="50%">
+                    <div class="caption">
+                        <h3>Easy periodic reports scheduling</h3>
+                        <p>Set periodic times after which to receive a summary of the status of all your scheduled tasks. These can be scheduled on a daily, weekly and monthly basis.</p>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="thumbnail">
+                    <img src="{% static 'img/intergrate.png' %}" alt="integrations" width="50%">
+                    <div class="caption">
+                        <h3>Wide range of Integrations</h3>
+                        <p>Add a number of ways to receive notifications for example SMS, Slack etc</p>
                     </div>
                 </div>
-
-                <div class="clearfix">
-                    <button type="submit" class="btn btn-lg btn-primary pull-right">
-                        Get Started
-                    </button>
+            </div>
+            <div class="col-md-4">
+                <div class="thumbnail">
+                    <img src="{% static 'img/team.png' %}" alt="teams" width="50%">
+                    <div class="caption">
+                        <h3>Easy Team Collaboration</h3>
+                        <p>Add team members who can also monitor your tasks.</p></br>
+                    </div>
                 </div>
-            </form>
-
+            </div>
         </div>
-    </div>
-</div>
-</div>
 
-<div class="container">
     <div class="row">
     <div class="col-sm-12">
         <h2 class="tour-title">A quick peek of what's inside:</h2>
@@ -331,6 +325,9 @@
 
 {% block scripts %}
 {% compress js %}
+<script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!-- {{ block.super }} -->
 <script src="{% static 'js/collapse-native.js' %}"></script>
 <script src="{% static 'js/tab-native.js' %}"></script>
 <script src="{% static 'js/welcome.js' %}"></script>
