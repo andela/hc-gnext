@@ -59,6 +59,9 @@ class CreateBlogPostView(LoginRequiredMixin, CommonContentMixin, generic.CreateV
         """
 
         super(CreateBlogPostView, self).get(request, *args, **kwargs)
+        return HttpResponseRedirect(reverse('hc-blog:category-create'),)
+
+    def form_invalid(self, form):
         return HttpResponseRedirect(reverse('hc-blog:category-create'))
 
     def get_form_kwargs(self):

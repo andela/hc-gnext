@@ -19,6 +19,13 @@
                     {% csrf_token %}
                     <div class="form-group">
                         {{ form.name }}
+                        <div class="input-error">
+                            {% if form.name.errors %}
+                                <ul class="error">
+                                    {{ form.name.errors }}
+                                </ul>
+                            {% endif %}
+                        </div>
                     </div>
                     <button class="btn btn-primary" type="submit">Create Category</button>
                 </form>
