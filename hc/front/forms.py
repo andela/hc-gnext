@@ -5,6 +5,8 @@ from hc.api.models import Channel
 class NameTagsForm(forms.Form):
     name = forms.CharField(max_length=100, required=False)
     tags = forms.CharField(max_length=500, required=False)
+    prior = forms.BooleanField(required=False)
+    email = forms.CharField(max_length=500, required=False)
 
     def clean_tags(self):
         tags_list = []
@@ -16,6 +18,15 @@ class NameTagsForm(forms.Form):
 
         return " ".join(tags_list)
 
+    def clean_emails(self):
+        emails_list = []
+
+        for part in self.cleaned_data["email"].split(" "):
+            part = part.strip()
+            if part != "":
+                emails_list.append(part)
+
+        return " ".join(tags_list)
 
 class TimeoutForm(forms.Form):
     timeout = forms.IntegerField(min_value=60, max_value=31104000)
