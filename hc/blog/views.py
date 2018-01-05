@@ -1,12 +1,18 @@
+"""
+Module with views to handle blog application CRUD functionalities.
+"""
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views import generic
+
+# third party app
+from braces.views import LoginRequiredMixin
+
 from .forms import CategoryForm, PostForm
 from .models import Category, Post
 from .mixins import CommonContentMixin, PostOwnerRequiredMixin
-
-from braces.views import LoginRequiredMixin
 
 
 class BlogIndexView(LoginRequiredMixin, CommonContentMixin, generic.TemplateView):
@@ -80,7 +86,10 @@ class BlogPostDetailView(LoginRequiredMixin, CommonContentMixin, generic.DetailV
     title = 'Post'
 
 
-class BlogPostUpdateView(LoginRequiredMixin, PostOwnerRequiredMixin, CommonContentMixin, generic.UpdateView):
+class BlogPostUpdateView\
+            (LoginRequiredMixin, PostOwnerRequiredMixin,
+             CommonContentMixin, generic.UpdateView):
+
     model = Post
     form_class = PostForm
     title = 'Blog Update'
@@ -106,9 +115,13 @@ class BlogPostUpdateView(LoginRequiredMixin, PostOwnerRequiredMixin, CommonConte
         return ctx
 
 
-class BlogPostDeleteView(LoginRequiredMixin, PostOwnerRequiredMixin, CommonContentMixin, generic.DeleteView):
+class BlogPostDeleteView\
+            (LoginRequiredMixin, PostOwnerRequiredMixin,
+             CommonContentMixin, generic.DeleteView):
+
     model = Post
     title = 'Confirm delete'
+
     def post(self, request, *args, **kwargs):
         """
         Ensure users confirm they really want the post gone

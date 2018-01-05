@@ -49,6 +49,10 @@ class Category(Timestamp):
         return reverse('hc-blog:index') + param
 
     def posts_in_category(self):
+        """
+        Gets all posts that are in the given category
+        :return:
+        """
         return self.posts.all()
 
     def __str__(self):

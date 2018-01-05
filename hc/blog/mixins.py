@@ -3,8 +3,11 @@ Module with custom mixin classes to avoid code repetition.
 """
 
 from django.contrib import messages
-from .models import Post
+
+# external app
 from braces.views import UserPassesTestMixin
+
+from .models import Post
 
 
 class CommonContentMixin(object):

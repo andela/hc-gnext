@@ -29,7 +29,8 @@ class CategoryForm(forms.ModelForm):
         name = self.cleaned_data.get('name', '')
         exists = Category.objects.filter(name=name)
         if exists:
-            raise forms.ValidationError('There exists a category with that name, choose a different name')
+            raise forms.ValidationError\
+                ('There exists a category with that name, choose a different name')
 
         return name
 
@@ -81,8 +82,9 @@ class PostForm(forms.ModelForm):
         title = self.cleaned_data.get('title', '')
         exists = Post.objects.filter(title=title)
         if exists:
-            messages.warning(self.request, 'There exists a post with that title, choose a different title')
-            raise forms.ValidationError('')
+            msg = 'There exists a post with that title, choose a different title'
+            messages.warning(self.request, msg)
+            raise forms.ValidationError(msg)
 
         return title
 
