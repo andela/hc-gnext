@@ -14,9 +14,9 @@
             </ol>
         
             <!-- Wrapper for slides -->
-            <div class="carousel-inner">
+            <div class="carousel-inner" style="height:360px;">
                 <div class="item active">
-                <img src="http://127.0.0.1:8000/static/img/my_checks%402x.png" alt="Schedule" style="width:100%;">
+                <img src="{% static 'img/new.jpg'%}" alt="Schedule" style="height:360px;">
                 <div class="carousel-caption">
                     <h3>Create scheduled tasks from a GUI</h3>
                     <p>A list of your checks, one for each Cron job, daemon or periodically running task you want to monitor.</br>
@@ -26,22 +26,15 @@
                 </div>
         
                 <div class="item">
-                <img src="http://127.0.0.1:8000/static/img/period_grace%402x.png" alt="Configure" style="width:100%;">
-                <div class="carousel-caption">
-                        <h3>Configurable Period and Grace Time</h3>
-                        <p>Each check has configurable Period and Grace Time parameters.</br> 
-                            Depending on these parameters and time since the last ping, the check is in one of the following states:new, up, late, down.
-
-                        </p>
-                </div>
-                </div>
-            
-                <div class="item">
-                <img src="http://127.0.0.1:8000/static/img/channels%402x.png" alt="Integrate" style="width:100%;">
+                <img src="{% static 'img/notify.jpg'%}" alt="Configure" style="height:360px;">
                 <div class="carousel-caption">
                         <h3>Integrate with all the popular messagings applications</h3>
                         <p>Now you can integrate with slack,email and so many others</p>
                 </div>
+                </div>
+            
+                <div class="item">
+                <img src="{% static 'img/cron.png'%}" alt="Integrate" width="100%">
                 </div>
             </div>
         
@@ -60,14 +53,12 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="thumbnail">
-                    <a href="http://127.0.0.1:8000/static/img/my_checks%402x.png">
                     <img src="{% static 'img/schedule.png' %}" alt="schedule tasks">
                     <div class="caption">
                         <h3>Easy task scheduling</h3>
                         <p>Create new checks and give them name for easy recognition later.
                             Adjust Period and Grace time to match the periodicity and duration of your tasks.</p>
                     </div>
-                    </a>
                 </div>
             </div>
             <div class="col-md-4">
@@ -75,17 +66,16 @@
                     <img src="{% static 'img/alarm.png' %}" alt="receive alerts">
                     <div class="caption">
                         <h3>Instant alerts</h3>
-                        <p>Receive instant alerts for whenver a task goes down or goes up when it has been down or runs too often.</p>
+                        <p>Receive instant alerts for whenver a task goes down or goes up when it has been down or runs too often.</p></br>
                     </div>
-                    </a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="thumbnail">
                     <img src="{% static 'img/report.png' %}" alt="receive reports">
                     <div class="caption">
-                        <h3>Easy periodic reports scheduling</h3>
-                        <p>Set periodic time after which to receive a summary of the status of all your scheduled tasks. The reports can be set to be received on a daily, weekly and monthly basis.</p>
+                        <h3>Schedule periodic reports</h3>
+                        <p>Set periodic time after which to receive a summary of the status of all your scheduled tasks on a daily, weekly and monthly basis.</p>
                     </div>
                     </a>
                 </div>
@@ -99,7 +89,6 @@
                         <h3>Wide range of Integrations</h3>
                         <p>Add a number of ways to receive notifications for example SMS, Slack etc</p>
                     </div>
-                    </a>
                 </div>
             </div>
             <div class="col-md-4">
@@ -107,140 +96,11 @@
                     <img src="{% static 'img/team.png' %}" alt="teams">
                     <div class="caption">
                         <h3>Easy Team Collaboration</h3>
-                        Add team members who can also monitor your tasks.
-                    </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    <div class="row">
-    
-    <h2 class="tour-title">Example of a crontab: </h2>
-    <div class="row">
-        <div class="col-sm-6 col-sm-push-6">
-            <p id="pitch-text">Make a HTTP GET request to this address from your cron job, daemon, script or long running task.
-            <strong>When this address is not requested for a set time period, you will get alerted.</strong> Below are snippets that are ready to be copy/pasted into your own scripts.</p>
-        </div>
-            <div class="col-sm-6 col-sm-pull-6">
-                <h2 id="pitch-subtitle">Here's an unique ping address for you:</h2>
-                <div id="pitch-url">
-                    <input
-                        id="pitch-url-input"
-                        class="form-control"
-                        type="text"
-                        value="{{ ping_url }}"
-                        readonly />
-                </div>
-            </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-12">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active">
-                    <a href="#crontab" data-toggle="tab">Crontab</a>
-                </li>
-                <li>
-                    <a href="#bash" data-toggle="tab">Bash</a>
-                </li>
-                <li>
-                    <a href="#python" data-toggle="tab">Python</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#node" data-toggle="tab">Node.js</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#php" data-toggle="tab">PHP</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#browser" data-toggle="tab">Browser</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#powershell" data-toggle="tab">PowerShell</a>
-                </li>
-                <li class="hidden-xs">
-                    <a href="#email" data-toggle="tab">Email</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="crontab">
-                    {% include "front/snippets/crontab.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="bash">
-                    {% include "front/snippets/bash.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="python">
-                    {% include "front/snippets/python.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="node">
-                    {% include "front/snippets/node.html" %}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="php">
-                    {% include "front/snippets/php.html" %}
-                </div>
-                <div class="tab-pane" id="browser">
-                    {% include "front/snippets/browser.html" %}
-                </div>
-                <div class="tab-pane" id="powershell">
-                    {% include "front/snippets/powershell.html" %}
-                </div>
-                <div class="tab-pane" id="email">
-                    <div class="instructions">
-                        As an alternative to HTTP/HTTPS requests,
-                        you can "ping" this check by sending an
-                        email message to
-                        <div class="email-address">
-                            <code>{{ check.email }}</code>
-                        </div>
+                        <p>Add team members who can also monitor your tasks.</p></br>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <br />
-    <div class="footer-jumbo-bleed">
-    <div class="col-sm-12">
-        <div class="jumbotron">
-            <div class="row">
-                <div class="col-sm-7">
-                    <p>healthchecks.io is a <strong>free</strong> and
-                    <a href="https://github.com/healthchecks/healthchecks">open source</a> service.
-                    Setting up monitoring for your cron jobs only takes minutes.
-                    Start sleeping better at nights!</p>
-
-                </div>
-                <div class="col-sm-1"></div>
-                <div class="col-sm-4">
-                    <form action="{% url 'hc-login' %}" method="post">
-                        {% csrf_token %}
-
-                        <div class="form-group">
-                            <div class="input-group input-group-lg">
-                                <div class="input-group-addon">@</div>
-                                <input
-                                    type="email"
-                                    class="form-control"
-                                    name="email"
-                                    autocomplete="email"
-                                    placeholder="Email">
-                            </div>
-                        </div>
-
-                        <div class="clearfix">
-                            <button type="submit" class="btn btn-lg btn-primary pull-right">
-                                Get Started
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    </div>
-
-    </div>
 
     <div class="row">
     <div class="col-sm-12">
