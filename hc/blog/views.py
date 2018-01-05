@@ -6,11 +6,12 @@ from .forms import CategoryForm, PostForm
 from .models import Category, Post
 from .mixins import CommonContentMixin, PostOwnerRequiredMixin
 
-from braces.views import UserPassesTestMixin, LoginRequiredMixin
+from braces.views import LoginRequiredMixin
 
 
 class BlogIndexView(LoginRequiredMixin, CommonContentMixin, generic.TemplateView):
     template_name = 'blog/index.html'
+    title = 'Blog Index'
 
     def get_context_data(self, **kwargs):
         ctx = super(BlogIndexView, self).get_context_data(**kwargs)
@@ -27,16 +28,17 @@ class BlogIndexView(LoginRequiredMixin, CommonContentMixin, generic.TemplateView
         return ctx
 
 
-class CreateCategoryView(LoginRequiredMixin, CommonContentMixin, generic.CreateView):
+class CategoryCreateView(LoginRequiredMixin, CommonContentMixin, generic.CreateView):
     form_class = CategoryForm
     template_name = 'blog/post_form.html'
+    title = 'Post Category'
 
     def get_success_url(self):
         messages.success(self.request, 'Blog post category created')
         return reverse('hc-blog:category-create')
 
     def get_context_data(self, **kwargs):
-        ctx = super(CreateCategoryView, self).get_context_data(**kwargs)
+        ctx = super(CategoryCreateView, self).get_context_data(**kwargs)
         post_form = PostForm()
         categories = Category.objects.all()
         ctx['categories'] = categories
@@ -45,9 +47,10 @@ class CreateCategoryView(LoginRequiredMixin, CommonContentMixin, generic.CreateV
         return ctx
 
 
-class CreateBlogPostView(LoginRequiredMixin, CommonContentMixin, generic.CreateView):
+class BlogPostCreateView(LoginRequiredMixin, CommonContentMixin, generic.CreateView):
     form_class = PostForm
     template_name = 'blog/post_form.html'
+    title = 'Create Blog'
 
     def get_success_url(self):
         messages.success(self.request, 'Blog post created')
@@ -58,53 +61,59 @@ class CreateBlogPostView(LoginRequiredMixin, CommonContentMixin, generic.CreateV
         Redirect all GET requests to the view
         """
 
-        super(CreateBlogPostView, self).get(request, *args, **kwargs)
+        super(BlogPostCreateView, self).get(request, *args, **kwargs)
         return HttpResponseRedirect(reverse('hc-blog:category-create'),)
 
     def form_invalid(self, form):
         return HttpResponseRedirect(reverse('hc-blog:category-create'))
 
     def get_form_kwargs(self):
-        kwargs = super(CreateBlogPostView, self).get_form_kwargs()
+        kwargs = super(BlogPostCreateView, self).get_form_kwargs()
         if 'request' not in kwargs:
             kwargs.update({'request': self.request})
 
         return kwargs
 
 
-class RetrievePostDetailView(LoginRequiredMixin, CommonContentMixin, generic.DetailView):
+class BlogPostDetailView(LoginRequiredMixin, CommonContentMixin, generic.DetailView):
     model = Post
+    title = 'Post'
 
 
-class UpdatePostView(
-    LoginRequiredMixin,
-    PostOwnerRequiredMixin,
-    CommonContentMixin,
-    generic.UpdateView):
+class BlogPostUpdateView(LoginRequiredMixin, PostOwnerRequiredMixin, CommonContentMixin, generic.UpdateView):
     model = Post
     form_class = PostForm
+    title = 'Blog Update'
 
     def get_success_url(self):
         return reverse('hc-blog:post-detail', kwargs={'slug': self.object.slug})
 
     def get_form_kwargs(self):
-        kwargs = super(UpdatePostView, self).get_form_kwargs()
+        """
+        Add `request` object to form kwargs for further actions
+        """
+
+        kwargs = super(BlogPostUpdateView, self).get_form_kwargs()
         if 'request' not in kwargs:
             kwargs.update({'request': self.request})
 
         return kwargs
 
     def get_context_data(self, **kwargs):
-        ctx = super(UpdatePostView, self).get_context_data(**kwargs)
+        ctx = super(BlogPostUpdateView, self).get_context_data(**kwargs)
         ctx['page_action'] = 'update'
         ctx['category_form'] = CategoryForm()
         return ctx
 
 
-class DeletePostView(LoginRequiredMixin, PostOwnerRequiredMixin, CommonContentMixin, generic.DeleteView):
+class BlogPostDeleteView(LoginRequiredMixin, PostOwnerRequiredMixin, CommonContentMixin, generic.DeleteView):
     model = Post
-
+    title = 'Confirm delete'
     def post(self, request, *args, **kwargs):
+        """
+        Ensure users confirm they really want the post gone
+        """
+
         post_data = request.POST
         confirm = post_data.get('confirm', False)
 
@@ -112,7 +121,7 @@ class DeletePostView(LoginRequiredMixin, PostOwnerRequiredMixin, CommonContentMi
             return HttpResponseRedirect(
                 reverse('hc-blog:post-detail', kwargs={'slug': kwargs.get('slug', '')}))
 
-        return super(DeletePostView, self).post(request, *args, **kwargs)
+        return super(BlogPostDeleteView, self).post(request, *args, **kwargs)
 
     def get_success_url(self):
         messages.success(self.request, 'Blog post successfully deleted')

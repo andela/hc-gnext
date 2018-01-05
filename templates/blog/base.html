@@ -3,6 +3,15 @@
 {% load staticfiles %}
 {% load compress staticfiles %}
 
+{% block title %}
+    {% if title %}
+        {{ title }} - healthchecks.io
+    {% else %}
+        healthchecks.io - Monitor Cron Jobs. Get Notified When Your Cron Jobs Fail
+    {% endif %}
+
+{% endblock %}
+
 {% block content %}
 
     {% compress css %}
