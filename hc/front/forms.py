@@ -26,7 +26,8 @@ class NameTagsForm(forms.Form):
             if part != "":
                 emails_list.append(part)
 
-        return " ".join(tags_list)
+        return " ".join(emails_list)
+
 
 class TimeoutForm(forms.Form):
     timeout = forms.IntegerField(min_value=60, max_value=31104000)
@@ -35,7 +36,6 @@ class TimeoutForm(forms.Form):
 
 
 class AddChannelForm(forms.ModelForm):
-
     class Meta:
         model = Channel
         fields = ['kind', 'value']
@@ -46,7 +46,6 @@ class AddChannelForm(forms.ModelForm):
 
 
 class AddAfricasTalkingForm(forms.ModelForm):
-
     class Meta:
         model = Channel
         fields = ['kind', 'username', 'api_key', 'value']
@@ -54,8 +53,6 @@ class AddAfricasTalkingForm(forms.ModelForm):
     def clean_value(self):
         value = self.cleaned_data["value"]
         return value.strip()
-
-
 
 
 class AddWebhookForm(forms.Form):

@@ -21,9 +21,11 @@ class Command(BaseCommand):
         now = timezone.now()
         going_down = query.filter(alert_after__lt=now, status="up")
         going_up = query.filter(alert_after__gt=now, status="down")
-        need_nagging =query.filter(nag_after__lt=now, status="down", nag_status=True)
+        need_nagging = query.filter(
+            nag_after__lt=now, status="down", nag_status=True)
         # Don't combine this in one query so Postgres can query using index:
-        checks = list(going_down.iterator()) + list(going_up.iterator()) + list(need_nagging.iterator())
+        checks = list(going_down.iterator()) + \
+            list(going_up.iterator()) + list(need_nagging.iterator())
 
         if not checks:
             return False
