@@ -20,6 +20,10 @@ def alert(to, ctx):
     send("alert", to, ctx)
 
 
+def escalate(to, ctx):
+    send("escalatedalert", to, ctx)
+
+
 def verify_email(to, ctx):
     send("verify-email", to, ctx)
 
