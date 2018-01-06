@@ -50,7 +50,10 @@ class Check(models.Model):
         # sendalerts command will query using these
         index_together = ["status", "user", "alert_after"]
 
-    name = models.CharField(max_length=100, blank=True, error_messages={'blank': 'Please make sure name is string!'})
+    name = models.CharField(max_length=100, blank=True,
+                            error_messages={
+                                'blank': 'Please make sure name is string!'})
+
     tags = models.CharField(max_length=500, blank=True)
     code = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
     user = models.ForeignKey(User, blank=True, null=True)
@@ -66,6 +69,7 @@ class Check(models.Model):
     nag_after = models.DateTimeField(null=True)
     is_high_priority = models.BooleanField(default=False)
     user_emails = models.CharField(max_length=700, blank=True)
+    escalate_after = models.DateTimeField(null=True)
 
     def name_then_code(self):
         if self.name:
@@ -132,7 +136,7 @@ class Check(models.Model):
         return [t.strip() for t in self.tags.split(" ") if t.strip()]
 
     def emails_list(self):
-        return [e.strip() for e in self.emails.split(" ") if e.strip()]
+        return [e.strip() for e in self.user_emails.split(" ") if e.strip()]
 
     def to_dict(self):
         pause_rel_url = reverse("hc-api-pause", args=[self.code])
@@ -148,7 +152,7 @@ class Check(models.Model):
             "n_pings": self.n_pings,
             "status": self.get_status(),
             "is_high_priority": self.is_high_priority,
-            "user_emails": self.emails
+            "user_emails": self.user_emails
 
         }
 
@@ -177,8 +181,10 @@ class Channel(models.Model):
     user = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True)
     kind = models.CharField(max_length=20, choices=CHANNEL_KINDS)
-    username = models.CharField(max_length=20, help_text="AfricasTalking username", blank=True)
-    api_key = models.CharField(max_length=80, null=True, blank=True, default="")
+    username = models.CharField(
+        max_length=20, help_text="AfricasTalking username", blank=True)
+    api_key = models.CharField(
+        max_length=80, null=True, blank=True, default="")
     value = models.TextField(blank=True)
     email_verified = models.BooleanField(default=False)
     checks = models.ManyToManyField(Check)
