@@ -1,0 +1,11 @@
+Hello,
+
+This is notification sent by healthchecks.io.
+The check "{{ check.name_then_code }}" has gone {{ check.get_status }}
+{% if check.get_status == "down" %} and has not been addressed 
+by the owner ({{ check.user.email }}). 
+{% endif %}
+
+--
+Regards,
+healthchecks.io
