@@ -7,12 +7,13 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views import generic
 
-# third party app
-from braces.views import LoginRequiredMixin
+# local apps
+from hc.blog.forms import CategoryForm, PostForm
+from hc.blog.models import Category, Post
+from hc.blog.mixins import CommonContentMixin, PostOwnerRequiredMixin
 
-from .forms import CategoryForm, PostForm
-from .models import Category, Post
-from .mixins import CommonContentMixin, PostOwnerRequiredMixin
+# third party apps
+from braces.views import LoginRequiredMixin
 
 
 class BlogIndexView(CommonContentMixin, generic.TemplateView):
@@ -39,18 +40,24 @@ class CategoryCreateView(LoginRequiredMixin, CommonContentMixin, generic.CreateV
     template_name = 'blog/post_form.html'
     title = 'Post Category'
 
-    def get_success_url(self):
-        messages.success(self.request, 'Blog post category created')
-        return reverse('hc-blog:category-create')
-
     def get_context_data(self, **kwargs):
         ctx = super(CategoryCreateView, self).get_context_data(**kwargs)
         post_form = PostForm()
         categories = Category.objects.all()
         ctx['categories'] = categories
         ctx['post_form'] = post_form
-        ctx['page_action'] = 'create'
         return ctx
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse('hc-blog:post-create'))
+
+    def get_success_url(self):
+        messages.success(self.request, 'Blog post category created')
+        return reverse('hc-blog:post-create')
+
+    def form_invalid(self, form):
+        messages.warning(self.request, 'There exists a category with that name')
+        return HttpResponseRedirect(reverse('hc-blog:category-create'))
 
 
 class BlogPostCreateView(LoginRequiredMixin, CommonContentMixin, generic.CreateView):
@@ -62,23 +69,24 @@ class BlogPostCreateView(LoginRequiredMixin, CommonContentMixin, generic.CreateV
         messages.success(self.request, 'Blog post created')
         return reverse('hc-blog:index')
 
-    def get(self, request, *args, **kwargs):
-        """
-        Redirect all GET requests to the view
-        """
-
-        super(BlogPostCreateView, self).get(request, *args, **kwargs)
-        return HttpResponseRedirect(reverse('hc-blog:category-create'),)
-
     def form_invalid(self, form):
-        return HttpResponseRedirect(reverse('hc-blog:category-create'))
+        messages.warning(self.request, 'Please fix the errors below')
+        return super(BlogPostCreateView, self).form_invalid(form)
 
     def get_form_kwargs(self):
         kwargs = super(BlogPostCreateView, self).get_form_kwargs()
+        if 'create' not in kwargs:
+            kwargs.update({'create': True})
+
         if 'request' not in kwargs:
             kwargs.update({'request': self.request})
 
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BlogPostCreateView, self).get_context_data(**kwargs)
+        ctx['category_form'] = CategoryForm()
+        return ctx
 
 
 class BlogPostDetailView(CommonContentMixin, generic.DetailView):
@@ -95,6 +103,7 @@ class BlogPostUpdateView\
     title = 'Blog Update'
 
     def get_success_url(self):
+        messages.success(self.request, 'Post updated!')
         return reverse('hc-blog:post-detail', kwargs={'slug': self.object.slug})
 
     def get_form_kwargs(self):
@@ -103,6 +112,9 @@ class BlogPostUpdateView\
         """
 
         kwargs = super(BlogPostUpdateView, self).get_form_kwargs()
+        if 'update' not in kwargs:
+            kwargs.update({'update': True})
+
         if 'request' not in kwargs:
             kwargs.update({'request': self.request})
 
@@ -111,7 +123,6 @@ class BlogPostUpdateView\
     def get_context_data(self, **kwargs):
         ctx = super(BlogPostUpdateView, self).get_context_data(**kwargs)
         ctx['page_action'] = 'update'
-        ctx['category_form'] = CategoryForm()
         return ctx
 
 

@@ -29,8 +29,7 @@ class CategoryForm(forms.ModelForm):
         name = self.cleaned_data.get('name', '')
         exists = Category.objects.filter(name=name)
         if exists:
-            raise forms.ValidationError\
-                ('There exists a category with that name, choose a different name')
+            raise forms.ValidationError('')
 
         return name
 
@@ -59,6 +58,12 @@ class PostForm(forms.ModelForm):
         if 'request' in kwargs:
             self.request = kwargs.pop('request')
 
+        if 'create' in kwargs:
+            self.create = kwargs.pop('create', False)
+
+        if 'update' in kwargs:
+            self.update = kwargs.pop('update', False)
+
         super(PostForm, self).__init__(*args, **kwargs)
 
         place_holders = {
@@ -68,11 +73,26 @@ class PostForm(forms.ModelForm):
 
         for field_name, field_obj in self.fields.items():
             if field_name == 'categories':
-                pass  # do nothing
+                field_obj.widget.attrs.update({'data-provide': 'markdown'})
 
             else:
                 field_obj.widget.attrs.update({'class': 'form-control'})
                 field_obj.widget.attrs.update({'placeholder': place_holders.get(field_name, '')})
+
+    def clean_title(self):
+        """
+        Check if post with the same title exists to avoid duplication.
+        """
+
+        title = self.cleaned_data.get('title', '')
+
+        if hasattr(self, 'create') and self.create:
+            exists = Post.objects.filter(title=title)
+            if exists:
+                msg = 'There exists a post with that title, choose a different title'
+                raise forms.ValidationError(msg)
+
+        return title
 
     def save(self, commit=True):
         obj = super(PostForm, self).save(commit=False)
