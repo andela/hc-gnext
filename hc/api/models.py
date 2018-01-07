@@ -14,32 +14,34 @@ from hc.api import transports
 from hc.lib import emails
 
 STATUSES = (
-	("up", "Up"),
-	("down", "Down"),
-	("new", "New"),
-	("paused", "Paused"),
-	("fast", "Fast")
+    ("up", "Up"),
+    ("down", "Down"),
+    ("new", "New"),
+    ("paused", "Paused"),
+    ("fast", "Fast")
 )
 
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
 DEFAULT_NAG = td(hours=1)
 
-CHANNEL_KINDS = (("email", "Email"),
-                 ("aft", "AfricasTalking"),
-                 ("webhook", "Webhook"),
-                 ("hipchat", "HipChat"),
-                 ("slack", "Slack"),
-                 ("pd", "PagerDuty"),
-                 ("po", "Pushover"),
-                 ("victorops", "VictorOps"))
+CHANNEL_KINDS = (
+    ("email", "Email"),
+    ("aft", "AfricasTalking"),
+    ("webhook", "Webhook"),
+    ("hipchat", "HipChat"),
+    ("slack", "Slack"),
+    ("pd", "PagerDuty"),
+    ("po", "Pushover"),
+    ("victorops", "VictorOps")
+)
 
 PO_PRIORITIES = {
-	-2: "lowest",
-	-1: "low",
-	0: "normal",
-	1: "high",
-	2: "emergency"
+    -2: "lowest",
+    -1: "low",
+    0: "normal",
+    1: "high",
+    2: "emergency"
 }
 
 
@@ -48,7 +50,10 @@ class Check(models.Model):
         # sendalerts command will query using these
         index_together = ["status", "user", "alert_after"]
 
-    name = models.CharField(max_length=100, blank=True, error_messages={'blank': 'Please make sure name is string!'})
+    name = models.CharField(max_length=100, blank=True,
+                            error_messages={
+                                'blank': 'Please make sure name is string!'})
+
     tags = models.CharField(max_length=500, blank=True)
     code = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
     user = models.ForeignKey(User, blank=True, null=True)
@@ -62,6 +67,9 @@ class Check(models.Model):
     interval = models.DurationField(default=DEFAULT_NAG)
     nag_status = models.BooleanField(default=True)
     nag_after = models.DateTimeField(null=True)
+    is_high_priority = models.BooleanField(default=False)
+    user_emails = models.CharField(max_length=700, blank=True)
+    escalate_after = models.DateTimeField(null=True)
 
     def name_then_code(self):
         if self.name:
@@ -96,8 +104,8 @@ class Check(models.Model):
 
         now = timezone.now()
         if self.last_ping + self.timeout - self.grace > now:
-			      return "fast"
-          
+            return "fast"
+
         if self.last_ping + self.timeout + self.grace > now:
             return "up"
 
@@ -110,7 +118,7 @@ class Check(models.Model):
         up_ends = self.last_ping + self.timeout
         grace_ends = up_ends + self.grace
         return up_ends < timezone.now() < grace_ends
-     
+
     def in_reverse_grace(self):
         if self.status in ("new", "paused"):
             return False
@@ -127,6 +135,9 @@ class Check(models.Model):
     def tags_list(self):
         return [t.strip() for t in self.tags.split(" ") if t.strip()]
 
+    def emails_list(self):
+        return [e.strip() for e in self.user_emails.split(" ") if e.strip()]
+
     def to_dict(self):
         pause_rel_url = reverse("hc-api-pause", args=[self.code])
 
@@ -139,7 +150,10 @@ class Check(models.Model):
             "grace": int(self.grace.total_seconds()),
             "interval": int(self.interval.total_seconds()),
             "n_pings": self.n_pings,
-            "status": self.get_status()
+            "status": self.get_status(),
+            "is_high_priority": self.is_high_priority,
+            "user_emails": self.user_emails
+
         }
 
         if self.last_ping:
@@ -153,13 +167,13 @@ class Check(models.Model):
 
 
 class Ping(models.Model):
-	n = models.IntegerField(null=True)
-	owner = models.ForeignKey(Check)
-	created = models.DateTimeField(auto_now_add=True)
-	scheme = models.CharField(max_length=10, default="http")
-	remote_addr = models.GenericIPAddressField(blank=True, null=True)
-	method = models.CharField(max_length=10, blank=True)
-	ua = models.CharField(max_length=200, blank=True)
+    n = models.IntegerField(null=True)
+    owner = models.ForeignKey(Check)
+    created = models.DateTimeField(auto_now_add=True)
+    scheme = models.CharField(max_length=10, default="http")
+    remote_addr = models.GenericIPAddressField(blank=True, null=True)
+    method = models.CharField(max_length=10, blank=True)
+    ua = models.CharField(max_length=200, blank=True)
 
 
 class Channel(models.Model):
@@ -167,8 +181,10 @@ class Channel(models.Model):
     user = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True)
     kind = models.CharField(max_length=20, choices=CHANNEL_KINDS)
-    username = models.CharField(max_length=20, help_text="AfricasTalking username", blank=True)
-    api_key = models.CharField(max_length=80, null=True, blank=True, default="")
+    username = models.CharField(
+        max_length=20, help_text="AfricasTalking username", blank=True)
+    api_key = models.CharField(
+        max_length=80, null=True, blank=True, default="")
     value = models.TextField(blank=True)
     email_verified = models.BooleanField(default=False)
     checks = models.ManyToManyField(Check)
@@ -280,11 +296,11 @@ class Channel(models.Model):
 
 
 class Notification(models.Model):
-	class Meta:
-		get_latest_by = "created"
+    class Meta:
+        get_latest_by = "created"
 
-	owner = models.ForeignKey(Check)
-	check_status = models.CharField(max_length=6)
-	channel = models.ForeignKey(Channel)
-	created = models.DateTimeField(auto_now_add=True)
-	error = models.CharField(max_length=200, blank=True)
+    owner = models.ForeignKey(Check)
+    check_status = models.CharField(max_length=6)
+    channel = models.ForeignKey(Channel)
+    created = models.DateTimeField(auto_now_add=True)
+    error = models.CharField(max_length=200, blank=True)

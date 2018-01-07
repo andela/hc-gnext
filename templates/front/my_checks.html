@@ -58,7 +58,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="update-timeout-title">Name and Tags</h4>
+                    <h4 class="update-timeout-title">Name, Tags and Priorities</h4>
                 </div>
                 <div class="modal-body">
                         <div class="form-group">
@@ -100,6 +100,48 @@
                                 </span>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                                <label class="col-sm-2 control-label" for="update_priority">
+                                        Priority
+                                    </label>
+                            <div class="col-sm-9">
+                                <input
+                                    id="update_priority"
+                                    name="prior"
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    data-toggle="collapse" 
+                                    data-target="#checker"
+                                >
+                                <label class="form-check-label" >High</label>
+                                
+                                <span class="help-block">
+                                    Assign Priority for important jobs that must stay in an up and active status.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group collapse" id="checker">
+                                <label for="update_email" class="col-sm-2 control-label">
+                                    Users
+                                </label>
+                                <div class="col-sm-9">
+                                    <input
+                                        id="update_email"
+                                        name="email"
+                                        type="text"
+                                        value=""
+                                        placeholder="Persons in Charge"
+                                        class="form-control" />
+    
+                                    <span class="help-block">
+                                        Person to be notified when the incharge does not resolve the failed job. Separate emails using spaces.
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

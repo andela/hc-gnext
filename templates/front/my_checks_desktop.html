@@ -37,12 +37,19 @@
         <td class="name-cell">
             <div data-name="{{ check.name }}"
                     data-tags="{{ check.tags }}"
+                    data-email="{{check.user_emails}}"
                     data-url="{% url 'hc-update-name' check.code %}"
+                    data-priority="{{ check.is_high_priority }}"
                     class="my-checks-name {% if not check.name %}unnamed{% endif %}">
                 <div>{{ check.name|default:"unnamed" }}</div>
                 {% for tag in check.tags_list %}
                 <span class="label label-tag">{{ tag }}</span>
                 {% endfor %}
+                {% if check.is_high_priority%}
+                <span class="label label-danger">High</span>
+                {% else %}
+                <span class="label label-primary">Normal</span>
+                {% endif %}
             </div>
         </td>
         <td class="url-cell">

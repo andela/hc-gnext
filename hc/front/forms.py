@@ -5,6 +5,8 @@ from hc.api.models import Channel
 class NameTagsForm(forms.Form):
     name = forms.CharField(max_length=100, required=False)
     tags = forms.CharField(max_length=500, required=False)
+    prior = forms.BooleanField(required=False)
+    email = forms.CharField(max_length=500, required=False)
 
     def clean_tags(self):
         tags_list = []
@@ -16,6 +18,16 @@ class NameTagsForm(forms.Form):
 
         return " ".join(tags_list)
 
+    def clean_emails(self):
+        emails_list = []
+
+        for part in self.cleaned_data["email"].split(" "):
+            part = part.strip()
+            if part != "":
+                emails_list.append(part)
+
+        return " ".join(emails_list)
+
 
 class TimeoutForm(forms.Form):
     timeout = forms.IntegerField(min_value=60, max_value=31104000)
@@ -24,7 +36,6 @@ class TimeoutForm(forms.Form):
 
 
 class AddChannelForm(forms.ModelForm):
-
     class Meta:
         model = Channel
         fields = ['kind', 'value']
@@ -35,7 +46,6 @@ class AddChannelForm(forms.ModelForm):
 
 
 class AddAfricasTalkingForm(forms.ModelForm):
-
     class Meta:
         model = Channel
         fields = ['kind', 'username', 'api_key', 'value']
@@ -43,8 +53,6 @@ class AddAfricasTalkingForm(forms.ModelForm):
     def clean_value(self):
         value = self.cleaned_data["value"]
         return value.strip()
-
-
 
 
 class AddWebhookForm(forms.Form):

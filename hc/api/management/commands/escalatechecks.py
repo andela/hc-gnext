@@ -6,62 +6,58 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from django.utils import timezone
 from hc.api.models import Check
+from hc.lib import emails
 
 executor = ThreadPoolExecutor(max_workers=10)
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = 'Sends UP/DOWN email alerts'
+    help = 'Sends escalation messages to a group of users'
 
     def handle_many(self):
-        """ Send alerts for many checks simultaneously. """
+        """ Send escalation emails for many checks at once """
         query = Check.objects.filter(user__isnull=False).select_related("user")
 
         now = timezone.now()
         going_down = query.filter(alert_after__lt=now, status="up")
         going_up = query.filter(alert_after__gt=now, status="down")
-        need_nagging = query.filter(
-            nag_after__lt=now, status="down", nag_status=True)
+        needs_escalation = query.filter(
+            escalate_after__lt=now, status='down', is_high_priority=True)
+
         # Don't combine this in one query so Postgres can query using index:
-        checks = list(going_down.iterator()) + \
-            list(going_up.iterator()) + list(need_nagging.iterator())
+        checks = list(going_down.iterator()) + list(going_up.iterator()) +\
+            list(needs_escalation.iterator())
 
         if not checks:
             return False
-        futures = [executor.submit(self.handle_one, check) for check in checks]
+
+        futures = [executor.submit(self.escalate_one, check)
+                   for check in checks]
         for future in futures:
             future.result()
 
         return True
 
-    def handle_one(self, check):
-        """ Send an alert for a single check.
-
-        Return True if an appropriate check was selected and processed.
-        Return False if no checks need to be processed.
-
-        """
-
-        # Save the new status. If sendalerts crashes,
-        # it won't process this check again.
+    def escalate_one(self, check):
         check.status = check.get_status()
-        check.save()
+        check.save()  # save the status
+
         if check.status == "down":
-            check.nag_after = (timezone.now() + check.interval)
-        check.save()
+            check.escalate_after = (
+                timezone.now() + check.interval + check.interval)
+        check.save()  # save the escalate_after field
 
-        tmpl = "\nSending alert, status=%s, code=%s\n"
+        tmpl = "\nSending escalated alert, status=%s, code=%s\n"
         self.stdout.write(tmpl % (check.status, check.code))
-        errors = check.send_alert()
-        for ch, error in errors:
-            self.stdout.write("ERROR: %s %s %s\n" % (ch.kind, ch.value, error))
 
+        emails.escalate(check.emails_list(), ctx={
+                        "check": check, "now": timezone.now()})
         connection.close()
         return True
 
     def handle(self, *args, **options):
-        self.stdout.write("sendalerts is now running")
+        self.stdout.write("escalatechecks is now running")
 
         ticks = 0
         while True:

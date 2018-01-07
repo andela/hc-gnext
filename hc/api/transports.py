@@ -38,7 +38,7 @@ class Transport(object):
         raise NotImplementedError()
 
     def checks(self):
-        return self.channel.user.check_set.order_by("created")
+        return self.channel.user.check_set.order_by("-is_high_priority")
 
 
 class AfricasTalking(Transport):
@@ -74,7 +74,6 @@ class Email(Transport):
 
 
 class HttpTransport(Transport):
-
     def request(self, method, url, **kwargs):
         try:
             options = dict(kwargs)
