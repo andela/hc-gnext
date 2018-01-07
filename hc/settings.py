@@ -123,8 +123,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-SITE_ROOT = "https://dev-gnext.herokuapp.com"
-#SITE_ROOT = "http://localhost:8000"
+SITE_ROOT = "https://gnext-priorities.herokuapp.com"
 
 PING_ENDPOINT = SITE_ROOT + "/ping/"
 PING_EMAIL_DOMAIN = HOST
@@ -168,4 +167,3 @@ if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
     from .local_settings import *
 else:
     warnings.warn("local_settings.py not found, using defaults")
-
