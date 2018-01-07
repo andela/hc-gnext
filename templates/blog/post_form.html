@@ -10,37 +10,56 @@
 
     <div class="container">
         <div class="row">
-        {% if page_action == 'create' %}
-            <div class="col-md-6">
 
-                <h3 class="page-header text-center">Create Category</h3>
-                <form method="post"
-                      class="blog-form form-inline">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {{ form.name }}
-                        <div class="input-error">
-                            {% if form.name.errors %}
-                                <ul class="error">
-                                    {{ form.name.errors }}
-                                </ul>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" type="submit">Create Category</button>
-                </form>
-            </div>
-        {% endif %}
             <div class="col-md-6 {% if page_action == 'update' %}col-sm-offset-3{% endif %}">
                 <h3 class="page-header text-center">Blog Post</h3>
 
-                {% if page_action == 'create' %}
-                    {% include 'blog/includes/post_create_form.html' %}
-                {% elif page_action == 'update' %}
-                    {% include 'blog/includes/post_update_form.html' %}
-                {% endif %}
+                 <form method="post" class="">
+
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="id_title">Title</label>
+                        {{ form.title }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_categories">Categories</label>
+                        <div class="ui form">
+                            <div class="field">
+                                {{ form.categories }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_content">Content</label>
+                        {{ form.content }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Publish</button>
+                </form>
 
             </div>
+
+            {% if page_action != 'update' %}
+                <div class="col-md-6">
+
+                    <h3 class="page-header text-center">Create Category</h3>
+                    <form method="post"
+                          class="blog-form col-sm-6 col-sm-offset-3" action="{% url 'hc-blog:category-create' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="id_name">Name</label>
+                            {{ category_form.name }}
+                        </div>
+
+                        <div class="">
+                            <button class="btn btn-primary btn-block" type="submit">Create Category</button>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
 
         </div>
     </div>
