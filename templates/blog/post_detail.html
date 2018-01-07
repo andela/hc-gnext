@@ -1,5 +1,6 @@
 {% extends 'blog/base.html' %}
 
+{% load blog_markdown %}
 
 {% block blog_content %}
 
@@ -15,7 +16,7 @@
                     </small>
                 </h4>
 
-                <p class="text-justify">{{ post.content }}</p>
+                <p class="text-justify">{{ post.content|markdownify }}</p>
                 <p>
                     <div class="addthis_inline_share_toolbox"></div>
                 </p>

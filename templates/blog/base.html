@@ -21,23 +21,22 @@
               crossorigin="anonymous">
         <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}" type="text/css"/>
         <link rel="stylesheet" href="{% static 'css/icon.min.css' %}" type="text/css"/>
+        <link rel="stylesheet" href="{% static 'css/bootstrap-markdown.min.css' %}" type="text/css"/>
+        <link rel="stylesheet" href="{% static 'css/code.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}" type="text/css">
     {% endcompress css %}
-
-    {% if messages %}
-    <div class="col-sm-12">
-        {% for message in messages %}
-            <p class="alert alert-{{ message.tags }}">{{ message }}</p>
-        {% endfor %}
-    </div>
-    {% endif %}
 
     <div class="row">
         <div class="col-sm-12">
-            <a href="{{ previous_url }}"><i class="arrow left icon"></i> back</a>
+            <div class="blog-back-arrow">
+                <a href="{{ previous_url }}"><i class="arrow left icon"></i> back</a>
+            </div>
         </div>
     </div>
 
-    {% block blog_content %}{% endblock blog_content %}
+    <div class="blog-body">
+        {% block blog_content %}{% endblock blog_content %}
+    </div>
 
     {% compress js %}
         <script
@@ -48,6 +47,10 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="{% static 'js/semantic.min.js' %}"></script>
         <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5a4f202486a0fb46"></script>
+        <script src="{% static 'js/markdown.js' %}"></script>
+        <script src="{% static 'js/marked.min.js' %}"></script>
+        <script src="{% static 'js/to-markdown.js' %}"></script>
+        <script src="{% static 'js/bootstrap-markdown.js' %}"></script>
         <script src="{% static 'js/blog.js' %}"></script>
 
     {% endcompress js %}

@@ -147,6 +147,14 @@
         </div>
     </nav>
 
+    {% if messages %}
+    <div class="col-sm-12">
+        {% for message in messages %}
+            <p class="alert alert-{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     {% block containers %}
     <div class="container">
         {% block content %}{% endblock %}
