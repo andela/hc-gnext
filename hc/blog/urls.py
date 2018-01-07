@@ -17,15 +17,15 @@ urlpatterns = [
         views.BlogPostCreateView.as_view(),
         name='post-create'),
 
-    url(r'^post/(?P<slug>[a-zA-Z-]+)$',
+    url(r'^post/(?P<slug>[a-zA-Z0-9-]+)$',
         views.BlogPostDetailView.as_view(),
         name='post-detail'),
 
-    url(r'^post/(?P<slug>[a-zA-Z-]+)/edit/$',
+    url(r'^post/(?P<slug>[a-zA-Z0-9-]+)/edit/$',
         views.BlogPostUpdateView.as_view(),
         name='post-update'),
 
-    url(r'^post/(?P<slug>[a-zA-Z-]+)/delete/$',
+    url(r'^post/(?P<slug>[a-zA-Z0-9-]+)/delete/$',
         views.BlogPostDeleteView.as_view(),
         name='post-delete'),
 ]
