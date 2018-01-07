@@ -1,0 +1,19 @@
+div.codehilite pre {
+    background-color: #ffffcc;
+}
+
+.blog-body{
+  margin-top: 50px;
+}
+
+.blog-back-arrow{
+  margin-top: 20px;
+}
+
+.blog-category-list{
+  margin-top: 20px;
+}
+
+.footer {
+    position: relative;
+}
