@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 
-{% load staticfiles %}
-{% load compress staticfiles %}
-
 {% block title %}
     {% if title %}
         {{ title }} - healthchecks.io
@@ -14,49 +11,20 @@
 
 {% block content %}
 
-    {% compress css %}
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-              rel="stylesheet"
-              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-              crossorigin="anonymous">
-        <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}" type="text/css"/>
-        <link rel="stylesheet" href="{% static 'css/icon.min.css' %}" type="text/css"/>
-        <link rel="stylesheet" href="{% static 'css/bootstrap-markdown.min.css' %}" type="text/css"/>
-        <link rel="stylesheet" href="{% static 'css/code.css' %}" type="text/css">
-        <link rel="stylesheet" href="{% static 'css/blog.css' %}" type="text/css">
-    {% endcompress css %}
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="blog-back-arrow">
-                <a href="{{ previous_url }}"><i class="arrow left icon"></i> back</a>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="blog-back-arrow">
+                    <a class="blog-link" href="{{ previous_url }}"><i class="glyphicon glyphicon-arrow-left"></i> back</a>
+                </div>
             </div>
         </div>
+
+         <div class="blog-body">
+             {% block blog_content %}{% endblock blog_content %}
+         </div>
+
     </div>
-
-    <div class="blog-body">
-        {% block blog_content %}{% endblock blog_content %}
-    </div>
-
-    {% compress js %}
-        <script
-			  src="https://code.jquery.com/jquery-3.2.1.min.js"
-			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-			  crossorigin="anonymous">
-        </script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script src="{% static 'js/semantic.min.js' %}"></script>
-        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5a4f202486a0fb46"></script>
-        <script src="{% static 'js/markdown.js' %}"></script>
-        <script src="{% static 'js/marked.min.js' %}"></script>
-        <script src="{% static 'js/to-markdown.js' %}"></script>
-        <script src="{% static 'js/bootstrap-markdown.js' %}"></script>
-        <script src="{% static 'js/blog.js' %}"></script>
-
-    {% endcompress js %}
 
 {% endblock content %}
-
-{% block scripts %}{% endblock scripts %}
 
 

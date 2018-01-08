@@ -8,13 +8,13 @@
         <br/>
         <div class="col-md-12">
 
-            <div class="ui piled segment">
-                <h4 class="ui header">
+            <div class="">
+                <h3 class="page-header blog-header">
                     <a href="{{ post.get_absolute_url }}">{{ post.title|capfirst }}</a>
                     <small class="pull-right">
                         {% include 'blog/includes/buttons.html' %}
                     </small>
-                </h4>
+                </h3>
 
                 <p class="text-justify">{{ post.content|markdownify }}</p>
                 <p>
