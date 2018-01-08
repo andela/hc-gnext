@@ -1,5 +1,7 @@
 $(document).ready(function() {
-    $(".ui.form select").addClass("ui search dropdown");
-    $('select.dropdown').dropdown();
     $("#id_content").markdown();
+    $('#id_categories').multiselect({enableFiltering: true});
+    $('ul.errorlist').addClass('list-unstyled small');
+    $('ul.errorlist li').addClass('text-danger');
+
 });

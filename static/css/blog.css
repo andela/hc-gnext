@@ -14,6 +14,6 @@ div.codehilite pre {
   margin-top: 20px;
 }
 
-.footer {
-    position: relative;
+.blog-header a:hover, .blog-link a:hover, a:hover{
+    text-decoration: none;
 }
