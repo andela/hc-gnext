@@ -16,22 +16,27 @@ from hc.blog.mixins import CommonContentMixin, PostOwnerRequiredMixin
 from braces.views import LoginRequiredMixin
 
 
-class BlogIndexView(CommonContentMixin, generic.TemplateView):
+class BlogIndexView(CommonContentMixin, generic.ListView):
+    model = Post
     template_name = 'blog/index.html'
     title = 'Blog Index'
+    context_object_name = 'posts'
+    paginate_by = 5
 
-    def get_context_data(self, **kwargs):
-        ctx = super(BlogIndexView, self).get_context_data(**kwargs)
+    def get_queryset(self):
         category_slug = self.request.GET.get('category', None)
-        posts = Post.objects.all()
 
         # filter posts by category
         if category_slug:
             posts = Post.objects.filter(categories__slug__contains=category_slug)
+            return posts
 
+        else:  # return default
+            return Post._default_manager.all()
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BlogIndexView, self).get_context_data(**kwargs)
         ctx['categories'] = Category.objects.all()
-        ctx['posts'] = posts
-
         return ctx
 
 
