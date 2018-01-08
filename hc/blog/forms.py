@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib import messages
 from django.template.defaultfilters import slugify
 from .models import Category, Post
 
@@ -73,7 +72,7 @@ class PostForm(forms.ModelForm):
 
         for field_name, field_obj in self.fields.items():
             if field_name == 'categories':
-                field_obj.widget.attrs.update({'data-provide': 'markdown'})
+                pass
 
             else:
                 field_obj.widget.attrs.update({'class': 'form-control'})
