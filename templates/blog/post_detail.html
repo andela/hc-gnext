@@ -9,13 +9,16 @@
         <div class="col-md-12">
 
             <div class="">
-                <h3 class="page-header blog-header">
+                <h3 class="blog-header">
                     <a href="{{ post.get_absolute_url }}">{{ post.title|capfirst }}</a>
                     <small class="pull-right">
                         {% include 'blog/includes/buttons.html' %}
                     </small>
                 </h3>
+                <br>
+                <small>posted {{ post.timestamp|timesince }} ago in {% for cat in post.categories.all %}<a href="{{ cat.get_absolute_url }}">{{ cat }}</a> {% endfor %}</small>
 
+                <hr>
                 <p class="text-justify">{{ post.content|markdownify }}</p>
                 <p>
                     <div class="addthis_inline_share_toolbox"></div>
