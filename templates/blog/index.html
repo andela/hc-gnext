@@ -22,7 +22,7 @@
                 <small>Posted {{ post.timestamp|timesince }} ago in {% for cat in post.categories.all %}<a href="{{ cat.get_absolute_url }}">{{ cat }}</a> {% endfor %}</small>
 
                 {% with post.content|markdownify as text %}
-                    <p class="text-justify">{{ text }}</p>
+                    <p class="text-justify">{{ text|truncatechars:300 }}</p>
                 {% endwith %}
 
                 <hr/>
