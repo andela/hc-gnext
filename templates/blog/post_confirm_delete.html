@@ -1,0 +1,31 @@
+{% extends 'blog/base.html' %}
+
+{% block blog_content %}
+
+    <div class="col-md-6 col-sm-offset-3">
+
+        <div class="ui two column centered grid">
+            <div class="column">
+                <div class="ui card">
+            <div class="content">
+                <p class="text-info">{{ post.title|upper }}</p>
+                <div class="ui form">
+                    <form method="post" class="form-inline">
+                        {% csrf_token %}
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input tabindex="0" class="" name="confirm" type="checkbox">
+                                <label>I agree to delete this blog post</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-danger btn-block">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

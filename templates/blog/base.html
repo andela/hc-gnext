@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if title %}
+        {{ title }} - healthchecks.io
+    {% else %}
+        healthchecks.io - Monitor Cron Jobs. Get Notified When Your Cron Jobs Fail
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="blog-back-arrow">
+                    <a class="blog-link" href="{{ previous_url }}"><i class="glyphicon glyphicon-arrow-left"></i> back</a>
+                </div>
+            </div>
+        </div>
+
+         <div class="blog-body">
+             {% block blog_content %}{% endblock blog_content %}
+         </div>
+
+    </div>
+
+{% endblock content %}
+
+

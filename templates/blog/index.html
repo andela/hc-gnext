@@ -1,0 +1,60 @@
+{% extends 'blog/base.html' %}
+
+{% load staticfiles blog_markdown %}
+
+{% block blog_content %}
+
+
+        <div class="col-md-8 col-sm-offset-2">
+            {% if request.user.is_authenticated %}
+                <div class="text-center">
+                    <a class="btn btn-success btn-xs" href='{% url "hc-blog:post-create" %}'><i class="glyphicon glyphicon-plus-sign"></i> create blog post</a>
+                </div>
+            {% endif %}
+
+            <hr/>
+
+            {% for post in posts %}
+                <h3 class="blog-header">
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </h3>
+                <br>
+                <small>Posted {{ post.timestamp|timesince }} ago in {% for cat in post.categories.all %}<a href="{{ cat.get_absolute_url }}">{{ cat }}</a> {% endfor %}</small>
+
+                {% with post.content|markdownify as text %}
+                    <p class="text-justify">{{ text|truncatechars:300 }}</p>
+                {% endwith %}
+
+                <hr/>
+
+            {% empty %}
+
+                <h4 class="text-center">No Posts!!</h4>
+
+            {% endfor %}
+
+            {% if page_obj %}
+                <div class="pagination">
+
+                    <span class="step-links">
+
+                        {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        {% endif %}
+
+                    </span>
+
+                </div>
+            {% endif %}
+
+        </div>
+
+{% endblock %}
